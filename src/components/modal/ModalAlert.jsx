@@ -10,7 +10,7 @@ const ModalAlert = ({ visible, closeModal, iconName, text, color }) => {
         <View style={styles.container}>
           <View style={[styles.alertContainer, { backgroundColor: color }]}>
             <Feather name={iconName} size={30} color="white" />
-            <View>
+            <View style={{ width: "90%" }}>
               <Text style={styles.textTitle}>{text}</Text>
             </View>
           </View>
