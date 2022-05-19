@@ -8,6 +8,7 @@ import size from "../constants/size";
 import ModalAlert from "../components/modal/ModalAlert";
 
 // TODO -> Controlador de errores de firebase
+// TODO -> Cambiar diseño (Boton registrarte)
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -31,9 +32,21 @@ const Login = () => {
         setShowSuccessModal(true);
       })
       .catch((err) => {
-        setMensageModal("Error, no se ha podido registrar");
+        setMensageModal(err.message);
         setShowErrorModal(true);
-        console.info(err.message);
+      });
+  };
+
+  const handleLogin = () => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        setMensageModal("Se ha podido logear en su cuenta");
+        setShowSuccessModal(true);
+      })
+      .catch((err) => {
+        setMensageModal(err.message);
+        setShowErrorModal(true);
       });
   };
 
@@ -61,7 +74,11 @@ const Login = () => {
         iconName="vpn-key"
       />
       <View style={styles.containerLogin}>
-        <Button title="INICIAR SESIÓN" style={styles.loginButton} />
+        <Button
+          title="INICIAR SESIÓN"
+          style={styles.loginButton}
+          onPress={handleLogin}
+        />
       </View>
       <View style={styles.separatorContainer}>
         <View style={styles.hr} />
