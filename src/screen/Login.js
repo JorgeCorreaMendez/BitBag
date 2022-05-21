@@ -83,6 +83,12 @@ const Login = () => {
           onPress={handleLogin}
         />
       </View>
+      <View style={styles.lostPasswordContainer}>
+        <Button
+          title="¿Has perdido la contraseña?"
+          style={styles.lostPasswordText}
+        />
+      </View>
       <View style={styles.separatorContainer}>
         <View style={styles.hr} />
 
@@ -90,17 +96,12 @@ const Login = () => {
         <View style={styles.hr} />
       </View>
 
-      <View style={styles.otherOptionsContainer}>
-        <Text style={styles.otherOptionsText}>¿No tienes cuenta ?</Text>
+      <View style={styles.SingUpContainer}>
         <Button
           title="Registrate"
-          style={styles.otherOptionsButton}
+          style={styles.SignUpButton}
           onPress={() => handleSingUp()}
         />
-      </View>
-      <View style={styles.otherOptionsContainer}>
-        <Text style={styles.otherOptionsText}>¿Has perdido la contraseña?</Text>
-        <Button title="Recuperar" style={styles.otherOptionsButton} />
       </View>
       <View>
         <ModalAlert
@@ -169,21 +170,28 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.secundary,
   },
-  otherOptionsContainer: {
+  lostPasswordContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    paddingVertical: "5%",
+    paddingTop: "10%",
   },
-  otherOptionsButton: {
+  SingUpContainer: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: "15%",
+  },
+  SignUpButton: {
     backgroundColor: colors.superficies,
     color: colors.primary,
-    paddingHorizontal: 20,
+    justifyContent: "center",
+    width: "100%",
+    height: "50%",
   },
-  otherOptionsText: {
+
+  lostPasswordText: {
     color: colors.primary,
     fontSize: size.h2,
-    width: "50%",
   },
 });
 
