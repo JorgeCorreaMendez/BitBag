@@ -36,7 +36,7 @@ export default function App() {
             },
             tabBarStyle: {
               backgroundColor: colors.superficies,
-              paddingBottom: 5,
+              paddingBottom: "3%",
               height: "9%",
             },
             tabBarLabelStyle: {
