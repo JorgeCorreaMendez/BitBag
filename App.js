@@ -1,6 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./src/screen/Login";
+import Tracks from "./src/screen/Tracks";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ export default function App() {
           options={{ headerShown: false }}
           component={Login}
         />
+        <Stack.Screen name="Tracks" component={Tracks} />
       </Stack.Navigator>
     </NavigationContainer>
   );

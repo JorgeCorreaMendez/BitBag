@@ -1,11 +1,14 @@
 import { Text, View, StyleSheet } from "react-native";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/core";
 import { auth } from "../services/firebase";
+
+import ModalAlert from "../components/modal/ModalAlert";
 import InputText from "../components/input/InputTextWithIcon";
 import Button from "../components/button/MyButton";
+
 import colors from "../constants/colors";
 import size from "../constants/size";
-import ModalAlert from "../components/modal/ModalAlert";
 
 // TODO -> Controlador de errores de firebase
 // TODO -> Cambiar diseño (Boton registrarte)
@@ -16,6 +19,8 @@ const Login = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [mensageModal, setMensageModal] = useState("");
+
+  const navigation = useNavigation();
 
   const onCloseModals = () => {
     setShowErrorModal(false);
@@ -28,8 +33,7 @@ const Login = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        setMensageModal("Se ha creado su cuenta");
-        setShowSuccessModal(true);
+        navigation.navigate("Tracks");
       })
       .catch((err) => {
         setMensageModal(err.message);
@@ -41,8 +45,7 @@ const Login = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        setMensageModal("Se ha podido logear en su cuenta");
-        setShowSuccessModal(true);
+        navigation.navigate("Tracks");
       })
       .catch((err) => {
         setMensageModal(err.message);
