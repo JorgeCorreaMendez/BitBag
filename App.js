@@ -17,55 +17,6 @@ const TracksIcon = (
   <MaterialIcons name="music-note" size={29} color={colors.primary} />
 );
 
-const TabNavigator = (
-  <Tab.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: colors.background,
-      },
-      tabBarStyle: {
-        backgroundColor: colors.superficies,
-        paddingBottom: 5,
-        height: "9%",
-      },
-      tabBarLabelStyle: {
-        fontSize: size.h4,
-      },
-      headerTintColor: colors.primary,
-      headerTitleAlign: "center",
-      tabBarActiveTintColor: colors.primary,
-    }}
-  >
-    <Tab.Screen
-      name="Tracks"
-      component={Tracks}
-      options={{
-        title: "Pistas",
-        headerBackVisible: false,
-        tabBarIcon: () => TracksIcon,
-      }}
-    />
-  </Tab.Navigator>
-);
-
-const StackNavigator = (
-  <Stack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: colors.background,
-      },
-      headerTintColor: colors.primary,
-      headerTitleAlign: "center",
-    }}
-  >
-    <Stack.Screen
-      name="Login"
-      options={{ headerShown: false }}
-      component={Login}
-    />
-  </Stack.Navigator>
-);
-
 export default function App() {
   const [user, setUser] = useState();
 
@@ -77,7 +28,43 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {user ? TabNavigator : StackNavigator}
+      {user ? (
+        <Tab.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: colors.background,
+            },
+            tabBarStyle: {
+              backgroundColor: colors.superficies,
+              paddingBottom: 5,
+              height: "9%",
+            },
+            tabBarLabelStyle: {
+              fontSize: size.h4,
+            },
+            headerTintColor: colors.primary,
+            headerTitleAlign: "center",
+            tabBarActiveTintColor: colors.primary,
+          }}
+        >
+          <Tab.Screen
+            name="Tracks"
+            component={Tracks}
+            options={{
+              title: "Pistas",
+              tabBarIcon: () => TracksIcon,
+            }}
+          />
+        </Tab.Navigator>
+      ) : (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            options={{ headerShown: false }}
+            component={Login}
+          />
+        </Stack.Navigator>
+      )}
     </NavigationContainer>
   );
 }
