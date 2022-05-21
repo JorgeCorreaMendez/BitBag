@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   textInput: {
     color: colors.primary,
     width: "90%",
-    fontSize: size.h3,
+    fontSize: size.h4,
     paddingLeft: 10,
   },
 });

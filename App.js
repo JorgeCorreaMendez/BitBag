@@ -1,3 +1,4 @@
+import { TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -28,15 +29,18 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {user ? (
+      {!user ? (
         <Tab.Navigator
           screenOptions={{
             headerStyle: {
               backgroundColor: colors.background,
             },
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
             tabBarStyle: {
               backgroundColor: colors.superficies,
-              paddingBottom: 5,
+              paddingTop: "1%",
               height: "9%",
             },
             tabBarLabelStyle: {
@@ -53,6 +57,15 @@ export default function App() {
             options={{
               title: "Pistas",
               tabBarIcon: () => TracksIcon,
+              headerRight: () => (
+                <TouchableOpacity style={{ paddingRight: 20 }}>
+                  <MaterialIcons
+                    name="add-circle-outline"
+                    size={35}
+                    color={colors.primary}
+                  />
+                </TouchableOpacity>
+              ),
             }}
           />
         </Tab.Navigator>
