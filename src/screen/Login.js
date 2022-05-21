@@ -20,8 +20,6 @@ const Login = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [mensageModal, setMensageModal] = useState("");
 
-  const navigation = useNavigation();
-
   const onCloseModals = () => {
     setShowErrorModal(false);
     setShowSuccessModal(false);
@@ -30,27 +28,17 @@ const Login = () => {
   };
 
   const handleSingUp = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        navigation.navigate("Tracks");
-      })
-      .catch((err) => {
-        setMensageModal(err.message);
-        setShowErrorModal(true);
-      });
+    auth.createUserWithEmailAndPassword(email, password).catch((err) => {
+      setMensageModal(err.message);
+      setShowErrorModal(true);
+    });
   };
 
   const handleLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        navigation.navigate("Tracks");
-      })
-      .catch((err) => {
-        setMensageModal(err.message);
-        setShowErrorModal(true);
-      });
+    auth.signInWithEmailAndPassword(email, password).catch((err) => {
+      setMensageModal(err.message);
+      setShowErrorModal(true);
+    });
   };
 
   return (
