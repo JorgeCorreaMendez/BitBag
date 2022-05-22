@@ -1,9 +1,21 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import SizeFileConverter from "../../utils/SizeFileConverter";
+import ModalOptions from "../modal/ModalOptions";
+
 import colors from "../../constants/colors";
 
-const Song = ({ songData }) => {
+const Song = ({ songData, onDelete }) => {
+  const [showOptionsModal, setShowOptionsModals] = useState(false);
+
+  const options = [
+    {
+      title: "Borrar canción",
+      iconName: "delete",
+      event: () => onDelete(songData.key),
+    },
+  ];
+
   return (
     <View style={{ paddingBottom: 20, paddingHorizontal: 10 }}>
       <View style={styles.container}>
@@ -16,14 +28,20 @@ const Song = ({ songData }) => {
             {songData.name}
           </Text>
           <Text numberOfLines={1} style={styles.description}>
-            {SizeFileConverter.getMBFrom(songData.size)} MB
+            {songData.size} MB
           </Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowOptionsModals(true)}>
           <View style={styles.iconContainer}>
             <MaterialIcons name="menu" size={26} color={colors.primary} />
           </View>
         </TouchableOpacity>
+        <ModalOptions
+          DataToShow={songData}
+          options={options}
+          visible={showOptionsModal}
+          closeModal={() => setShowOptionsModals(false)}
+        />
       </View>
     </View>
   );

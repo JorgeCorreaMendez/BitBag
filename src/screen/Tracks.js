@@ -1,31 +1,24 @@
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/core";
+
 import { getDocumentAsync } from "expo-document-picker";
-import { MaterialIcons } from "@expo/vector-icons";
-import 'react-native-get-random-values';
+import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
-import colors from "../constants/colors";
-import size from "../constants/size";
+
 import SearchInputText from "../components/input/SearchInputText";
 import Button from "../components/button/MyButton";
 import SongList from "../components/item/SongList";
 
-// TODO -> Ordenar canciones por fecha, nombre y duracion
+import SizeFileConverter from "../utils/SizeFileConverter";
+import colors from "../constants/colors";
+import size from "../constants/size";
 
-const addNewSong = (
-  <TouchableOpacity onPress={() => importSong()}>
-    <MaterialIcons name="add-circle-outline" size={35} color={colors.primary} />
-  </TouchableOpacity>
-);
+// TODO -> Ordenar canciones por fecha, nombre y duracion
+// TODO -> Añadir boton en el header para importar
 
 const Tracks = () => {
-  useNavigation().setOptions({ headerRight: () => addNewSong });
-
   const [songs, setSongs] = useState([]);
   const [searchText, setSearchText] = useState("");
-
-  console.log(songs)
 
   const importSong = () => {
     getDocumentAsync({ type: "audio/mpeg" })
@@ -35,14 +28,18 @@ const Tracks = () => {
             ...currentValue,
             {
               key: uuidv4(),
-              name: song.name.replace(".mp3"),
-              size: song.size,
+              name: song.name.replace(".mp3", ""),
+              size: SizeFileConverter.getMBFrom(song.size),
               uri: song.uri,
             },
           ]);
         }
       })
       .catch((err) => console.error(err.message));
+  };
+
+  const deleteSong = (key) => {
+    setSongs((currentValue) => currentValue.filter((el) => el === key));
   };
 
   return (
@@ -76,7 +73,7 @@ const Tracks = () => {
         </View>
       ) : (
         <>
-          <SongList list={songs} />
+          <SongList list={songs} onDelete={deleteSong} />
         </>
       )}
     </View>
