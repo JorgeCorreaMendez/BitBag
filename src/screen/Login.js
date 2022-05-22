@@ -4,15 +4,16 @@ import { useNavigation } from "@react-navigation/core";
 import { auth } from "../services/firebase";
 
 import ModalAlert from "../components/modal/ModalAlert";
+import ModalInputData from "../components/modal/ModalInputData";
 import InputText from "../components/input/InputTextWithIcon";
 import Button from "../components/button/MyButton";
 
+import firebaseUtils from "../utils/firebaseUtils";
 import colors from "../constants/colors";
 import size from "../constants/size";
-import ModalInputData from "../components/modal/ModalInputData";
 
 // TODO -> Controlador de errores de firebase
-// TODO -> Modales dejan de aparecer al utilizar handleRegister (iOS?)
+// TODO -> Modales dejan de aparecer al utilizar handleRegister, (si pones un correo valido se arregla ??)(iOS?)
 // TODO -> TextInput de ModalInputData no abre teclado en Android
 
 const Login = () => {
@@ -21,10 +22,8 @@ const Login = () => {
   const [emailRecover, setEmailRecover] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showRecoverPasswordModal, setShowRecoverPasswordModal] =
-    useState(false);
-
-  const [mensageModal, setMensageModal] = useState("");
+  const [showRecoverPasswordModal, setShowRecoverPasswordModal] = useState(false);
+  const [messageModal, setMessageModal] = useState("");
 
   const navigation = useNavigation();
 
@@ -32,7 +31,7 @@ const Login = () => {
     setShowErrorModal(false);
     setShowSuccessModal(false);
 
-    setMensageModal("");
+    setMessageModal("");
   };
 
   const handleSingUp = () => {
@@ -42,7 +41,7 @@ const Login = () => {
         navigation.navigate("Tracks");
       })
       .catch((err) => {
-        setMensageModal(err.message);
+        setMessageModal(firebaseUtils.getCustomErrorMessage(err.code));
         setShowErrorModal(true);
       });
   };
@@ -54,7 +53,7 @@ const Login = () => {
         navigation.navigate("Tracks");
       })
       .catch((err) => {
-        setMensageModal(err.message);
+        setMessageModal(firebaseUtils.getCustomErrorMessage(err.code));
         setShowErrorModal(true);
       });
   };
@@ -63,13 +62,13 @@ const Login = () => {
     auth
       .sendPasswordResetEmail(emailRecover)
       .then(() => {
-        setMensageModal(
+        setMessageModal(
           "Se ha enviado el correo, compruebe su bandeja de entrada"
         );
         setShowSuccessModal(true);
       })
       .catch((err) => {
-        setMensageModal(err.message);
+        setMessageModal(firebaseUtils.getCustomErrorMessage(err.code));
         setShowErrorModal(true);
       });
 
@@ -131,14 +130,14 @@ const Login = () => {
         <ModalAlert
           visible={showSuccessModal}
           closeModal={onCloseModals}
-          text={mensageModal}
+          text={messageModal}
           iconName="check-circle"
           color={colors.success}
         />
         <ModalAlert
           visible={showErrorModal}
           closeModal={onCloseModals}
-          text={mensageModal}
+          text={messageModal}
           iconName="alert-circle"
           color={colors.error}
         />
