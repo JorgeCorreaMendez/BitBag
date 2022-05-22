@@ -16,38 +16,40 @@ const ModalInputData = ({
   value,
   onChange,
   iconName,
-  onPress,
+  textDescription,
+  onPressIconFunction,
   ...props
 }) => {
   return (
     <Modal animationType="fade" visible={visible} transparent={true}>
       <View style={styles.background}>
         <Modal animationType="slice" visible={visible} transparent={true}>
-          <TouchableOpacity
-            onPress={() => closeModal()}
-            style={styles.container}
-          >
-            <View style={styles.modalContainer}>
-              <Text style={styles.textInfo}>
-                Introduzca su correo para poder enviarle un metodo de
-                recoperación.
-              </Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  value={value}
-                  onChangeText={(text) => onChange(text)}
-                  style={styles.textInput}
-                  placeholderTextColor={colors.primary}
-                  {...props}
-                />
-                <TouchableOpacity onPress={() => onPress()}>
-                  <MaterialIcons
-                    name={iconName}
-                    size={30}
-                    color={colors.primary}
-                    style={{ paddingLeft: 10 }}
+          <TouchableOpacity onPress={() => closeModal()}>
+            <View style={styles.container}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.textInfo}>{textDescription}</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    value={value}
+                    onChangeText={(text) => onChange(text)}
+                    style={styles.textInput}
+                    placeholderTextColor={colors.primary}
+                    {...props}
                   />
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      closeModal();
+                      onPressIconFunction();
+                    }}
+                  >
+                    <MaterialIcons
+                      name={iconName}
+                      size={30}
+                      color={colors.primary}
+                      style={{ paddingLeft: 10 }}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -65,6 +67,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: "10%",
     paddingHorizontal: "3%",
+    height: "100%",
   },
   modalContainer: {
     backgroundColor: colors.background,
@@ -85,6 +88,7 @@ const styles = StyleSheet.create({
     width: "80%",
     fontSize: size.h3,
     backgroundColor: colors.superficies,
+    color: colors.primary,
     borderRadius: 15,
     paddingHorizontal: 20,
     paddingVertical: 10,
