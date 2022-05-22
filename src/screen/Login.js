@@ -9,15 +9,21 @@ import Button from "../components/button/MyButton";
 
 import colors from "../constants/colors";
 import size from "../constants/size";
+import ModalInputData from "../components/modal/ModalInputData";
 
 // TODO -> Controlador de errores de firebase
-// TODO -> Cambiar diseño (Boton registrarte)
+// TODO -> Modales dejan de aparecer al utilizar handleRegister (iOS?)
+// TODO -> TextInput de ModalInputData no abre teclado en Android
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailRecover, setEmailRecover] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showRecoverPasswordModal, setShowRecoverPasswordModal] =
+    useState(false);
+
   const [mensageModal, setMensageModal] = useState("");
 
   const navigation = useNavigation();
@@ -51,6 +57,23 @@ const Login = () => {
         setMensageModal(err.message);
         setShowErrorModal(true);
       });
+  };
+
+  const handleRecoverPassword = () => {
+    auth
+      .sendPasswordResetEmail(emailRecover)
+      .then(() => {
+        setMensageModal(
+          "Se ha enviado el correo, compruebe su bandeja de entrada"
+        );
+        setShowSuccessModal(true);
+      })
+      .catch((err) => {
+        setMensageModal(err.message);
+        setShowErrorModal(true);
+      });
+
+    setEmailRecover("");
   };
 
   return (
@@ -87,6 +110,7 @@ const Login = () => {
         <Button
           title="¿Has perdido la contraseña?"
           style={styles.lostPasswordText}
+          onPress={() => setShowRecoverPasswordModal(true)}
         />
       </View>
       <View style={styles.separatorContainer}>
@@ -117,6 +141,18 @@ const Login = () => {
           text={mensageModal}
           iconName="alert-circle"
           color={colors.error}
+        />
+
+        <ModalInputData
+          visible={showRecoverPasswordModal}
+          closeModal={() => setShowRecoverPasswordModal(false)}
+          value={emailRecover}
+          onChange={setEmailRecover}
+          onPressIconFunction={handleRecoverPassword}
+          iconName="send"
+          textDescription="Introduzca su correo para poder enviarle un metodo de recoperación."
+          placeholder="Correo electronico"
+          keyboardType="email-address"
         />
       </View>
     </View>
