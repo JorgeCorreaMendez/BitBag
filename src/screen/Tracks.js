@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useNavigation } from "@react-navigation/core";
 import { getDocumentAsync } from "expo-document-picker";
 import { MaterialIcons } from "@expo/vector-icons";
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from "uuid";
 import colors from "../constants/colors";
 import size from "../constants/size";
 import SearchInputText from "../components/input/SearchInputText";
@@ -23,6 +25,8 @@ const Tracks = () => {
   const [songs, setSongs] = useState([]);
   const [searchText, setSearchText] = useState("");
 
+  console.log(songs)
+
   const importSong = () => {
     getDocumentAsync({ type: "audio/mpeg" })
       .then((song) => {
@@ -30,7 +34,7 @@ const Tracks = () => {
           setSongs((currentValue) => [
             ...currentValue,
             {
-              key: Math.random().toString(),
+              key: uuidv4(),
               name: song.name.replace(".mp3"),
               size: song.size,
               uri: song.uri,

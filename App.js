@@ -29,7 +29,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {user ? (
+      {!user ? (
         <Tab.Navigator
           screenOptions={{
             headerStyle: {
