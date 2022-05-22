@@ -4,8 +4,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { auth } from "./src/services/firebase";
 import { MaterialIcons } from "@expo/vector-icons";
-import Login from "./src/screen/Login";
+
 import Tracks from "./src/screen/Tracks";
+import Login from "./src/screen/Login";
 
 import colors from "./src/constants/colors";
 import size from "./src/constants/size";
@@ -41,6 +42,9 @@ export default function App() {
             },
             tabBarLabelStyle: {
               fontSize: size.h4,
+            },
+            headerRightContainerStyle: {
+              paddingRight: 20,
             },
             headerTintColor: colors.primary,
             headerTitleAlign: "center",

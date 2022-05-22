@@ -1,5 +1,6 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import SizeFileConverter from "../../utils/SizeFileConverter";
 import colors from "../../constants/colors";
 
 const Song = ({ songData }) => {
@@ -15,7 +16,7 @@ const Song = ({ songData }) => {
             {songData.name}
           </Text>
           <Text numberOfLines={1} style={styles.description}>
-            {songData.size}MB
+            {SizeFileConverter.getMBFrom(songData.size)} MB
           </Text>
         </View>
         <TouchableOpacity>
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   iconContainer: {
-    paddingLeft: "15%",
+    paddingLeft: "20%",
   },
 });
 
