@@ -7,6 +7,8 @@ import {
   StyleSheet,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 import colors from "../../constants/colors";
 import size from "../../constants/size";
 
@@ -42,7 +44,7 @@ const ModalOptions = ({ DataToShow, options, visible, closeModal }) => {
 
                 return (
                   <TouchableOpacity
-                    key={DataToShow.key}
+                    key={uuidv4()}
                     onPress={() => {
                       event();
                       closeModal();
