@@ -7,6 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import Tracks from "./src/screen/Tracks";
 import Login from "./src/screen/Login";
+import Player from "./src/screen/Player";
 
 import colors from "./src/constants/colors";
 import size from "./src/constants/size";
@@ -14,8 +15,12 @@ import size from "./src/constants/size";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TracksIcon = (
+const tracksIcon = (
   <MaterialIcons name="music-note" size={29} color={colors.primary} />
+);
+
+const playerIcon = (
+  <MaterialIcons name="play-circle-outline" size={29} color={colors.primary} />
 );
 
 export default function App() {
@@ -56,7 +61,16 @@ export default function App() {
             component={Tracks}
             options={{
               title: "Pistas",
-              tabBarIcon: () => TracksIcon,
+              tabBarIcon: () => tracksIcon,
+            }}
+          />
+          <Tab.Screen
+            name="Player"
+            component={Player}
+            options={{
+              title: "Reproductor",
+              tabBarIcon: () => playerIcon,
+              headerShown: false,
             }}
           />
         </Tab.Navigator>

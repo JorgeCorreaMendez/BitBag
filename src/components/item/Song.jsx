@@ -1,5 +1,6 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import ModalOptions from "../modal/ModalOptions";
 
@@ -7,8 +8,14 @@ import colors from "../../constants/colors";
 
 const Song = ({ songData, onDelete }) => {
   const [showOptionsModal, setShowOptionsModals] = useState(false);
+  const navigator = useNavigation();
 
   const options = [
+    {
+      title: "Reproducir canción",
+      iconName: "play-arrow",
+      event: () => navigator.navigate("Player"),
+    },
     {
       title: "Borrar canción",
       iconName: "delete",
