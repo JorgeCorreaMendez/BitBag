@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import SearchInputText from "../components/input/SearchInputText";
 import Button from "../components/button/MyButton";
 import SongList from "../components/item/SongList";
+import ModalAlert from "../components/modal/ModalAlert";
 
 import SizeFileConverter from "../utils/SizeFileConverter";
 import colors from "../constants/colors";
@@ -16,15 +17,32 @@ import size from "../constants/size";
 
 // TODO -> Ordenar canciones por fecha, nombre y duracion
 // TODO -> Añadir boton en el header para importar
+// TODO -> Añadir alerta al borrar cancion
 
 const Tracks = () => {
   const [songs, setSongs] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [mensageModal, setMensageModal] = useState("");
 
-  const importSong = () => {
-    getDocumentAsync({ type: "audio/mpeg" })
-      .then((song) => {
-        if (song.type === "success") {
+  const onCloseModals = () => {
+    setShowErrorModal(false);
+    setShowSuccessModal(false);
+
+    setMensageModal("");
+  };
+
+  const importSong = async () => {
+    try {
+      const song = await getDocumentAsync({ type: "audio/mpeg" });
+
+      if (song.type === "success") {
+        const isSongInPlaylist = songs.some(
+          (el) => el.name + ".mp3" === song.name
+        );
+
+        if (!isSongInPlaylist) {
           setSongs((currentValue) => [
             ...currentValue,
             {
@@ -34,9 +52,17 @@ const Tracks = () => {
               uri: song.uri,
             },
           ]);
+          setMensageModal("Se ha importado la cancion a la lista");
+          setShowSuccessModal(true);
+        } else {
+          setMensageModal("La canción ya se encuentra en la lista");
+          setShowErrorModal(true);
         }
-      })
-      .catch((err) => console.error(err.message));
+      }
+    } catch (err) {
+      setMensageModal(`Error al importar la canción, codigo ${err.code}`);
+      setShowErrorModal(true);
+    }
   };
 
   const deleteSong = (key) => {
@@ -94,6 +120,21 @@ const Tracks = () => {
               backgroundColor: colors.superficies,
             }}
             onPress={importSong}
+          />
+
+          <ModalAlert
+            visible={showSuccessModal}
+            closeModal={onCloseModals}
+            text={mensageModal}
+            iconName="check-circle"
+            color={colors.success}
+          />
+          <ModalAlert
+            visible={showErrorModal}
+            closeModal={onCloseModals}
+            text={mensageModal}
+            iconName="alert-circle"
+            color={colors.error}
           />
         </View>
       )}
