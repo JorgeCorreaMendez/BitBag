@@ -1,8 +1,9 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
+import Time from "../utils/Time";
 import colors from "../constants/colors";
 import size from "../constants/size";
 
@@ -10,7 +11,21 @@ import size from "../constants/size";
 const Player = ({ route }) => {
   const song = route.params?.song;
   const [isPlaying, setIsPlaying] = useState(false);
+  const [durationSong, setDurationSong] = useState(0);
+  const [positionSong, setPositionSong] = useState(0);
   const AudioPlayer = useRef(new Audio.Sound());
+
+  useEffect(() => {
+    setInterval(() => {
+      const interval = AudioPlayer.current.getStatusAsync().then((res) => {
+        if (res.isLoaded) {
+          setPositionSong(res.positionMillis);
+        }
+      }, 1000);
+
+      clearTimeout(interval);
+    });
+  }, []);
 
   const startNewSound = async () => {
     try {
@@ -20,8 +35,13 @@ const Player = ({ route }) => {
 
       if (!isLoaded) {
         await AudioPlayer.current.unloadAsync();
-
         await AudioPlayer.current.loadAsync({ uri: song.uri });
+
+        const durationMillis = await (
+          await AudioPlayer.current.getStatusAsync()
+        ).durationMillis;
+
+        setDurationSong(durationMillis);
       }
 
       await AudioPlayer.current.playAsync();
@@ -37,6 +57,15 @@ const Player = ({ route }) => {
       await AudioPlayer.current.pauseAsync();
 
       setIsPlaying(false);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const moveSongTo = async (positionMillis) => {
+    try {
+      await AudioPlayer.current.playFromPositionAsync(positionMillis);
+      setIsPlaying(true);
     } catch (err) {
       console.error(err.message);
     }
@@ -62,11 +91,24 @@ const Player = ({ route }) => {
           </View>
           <View style={styles.sliderContainer}>
             <Slider
+              value={positionSong}
+              maximumValue={durationSong}
+              onValueChange={(value) => moveSongTo(value)}
               style={{ width: "90%" }}
               thumbTintColor={colors.secundary}
               minimumTrackTintColor={colors.primary}
               maximumTrackTintColor={colors.secundary}
             />
+          </View>
+          <View>
+            <View style={styles.timeContainer}>
+              <Text style={{ color: colors.primary }}>
+                {Time.parseMillisecondsToMinutes(positionSong)}
+              </Text>
+              <Text style={{ color: colors.primary }}>
+                {Time.parseMillisecondsToMinutes(durationSong)}
+              </Text>
+            </View>
           </View>
           <View style={styles.playerContainer}>
             <TouchableOpacity>
@@ -141,13 +183,20 @@ const styles = StyleSheet.create({
   },
   sliderContainer: {
     alignItems: "center",
-    paddingVertical: 20,
+    paddingTop: 20,
+  },
+  timeContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: "8%",
+    width: "100%",
   },
   playerContainer: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
+    paddingTop: 20,
   },
 });
 
