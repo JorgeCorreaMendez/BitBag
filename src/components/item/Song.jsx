@@ -14,7 +14,7 @@ const Song = ({ songData, onDelete }) => {
     {
       title: "Reproducir canción",
       iconName: "play-arrow",
-      event: () => navigator.navigate("Player"),
+      event: () => navigator.navigate("Player", { song: songData }),
     },
     {
       title: "Borrar canción",
