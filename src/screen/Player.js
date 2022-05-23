@@ -7,13 +7,23 @@ import Time from "../utils/Time";
 import colors from "../constants/colors";
 import size from "../constants/size";
 
+// TODO -> setInterval sigue teniendo Excessive number of pending callbacks pero solo con varias canciones
 
 const Player = ({ route }) => {
-  const song = route.params?.song;
+  const playlist = route.params?.songs;
+  const [positionPlaylist, setPositionPlaylist] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [durationSong, setDurationSong] = useState(0);
   const [positionSong, setPositionSong] = useState(0);
   const AudioPlayer = useRef(new Audio.Sound());
+
+  const moveToNextPositionPlaylist = () => {
+    setPositionPlaylist((currentValue) => (currentValue + 1) % playlist.length);
+  };
+
+  const moveToPreviusPositionPlaylist = () => {
+    setPositionPlaylist((currentValue) => (currentValue - 1) % playlist.length);
+  };
 
   useEffect(() => {
     setInterval(() => {
@@ -35,7 +45,9 @@ const Player = ({ route }) => {
 
       if (!isLoaded) {
         await AudioPlayer.current.unloadAsync();
-        await AudioPlayer.current.loadAsync({ uri: song.uri });
+        await AudioPlayer.current.loadAsync({
+          uri: playlist[positionPlaylist].uri,
+        });
 
         const durationMillis = await (
           await AudioPlayer.current.getStatusAsync()
@@ -62,6 +74,28 @@ const Player = ({ route }) => {
     }
   };
 
+  const skipPreviusSong = async () => {
+    try {
+      await AudioPlayer.current.unloadAsync();
+
+      moveToPreviusPositionPlaylist();
+      startNewSound();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const skipNextSong = async () => {
+    try {
+      await AudioPlayer.current.unloadAsync();
+
+      moveToNextPositionPlaylist();
+      startNewSound();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const moveSongTo = async (positionMillis) => {
     try {
       await AudioPlayer.current.playFromPositionAsync(positionMillis);
@@ -71,9 +105,31 @@ const Player = ({ route }) => {
     }
   };
 
+  const playAndPause = (
+    <View>
+      {isPlaying ? (
+        <TouchableOpacity onPress={() => pauseSound()}>
+          <MaterialIcons
+            name="pause-circle-filled"
+            size={80}
+            color={colors.primary}
+          />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={() => startNewSound()}>
+          <MaterialIcons
+            name="play-circle-filled"
+            size={80}
+            color={colors.primary}
+          />
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      {song ? (
+      {playlist ? (
         <View>
           <View style={styles.imageContainer}>
             <Image
@@ -83,7 +139,7 @@ const Player = ({ route }) => {
           </View>
           <View style={{ paddingLeft: "10%" }}>
             <Text style={{ color: colors.primary, fontSize: size.h3 }}>
-              {song.name}
+              {playlist[positionPlaylist]?.name}
             </Text>
             <Text style={{ color: colors.secundary, fontSize: size.h4 }}>
               Reproduciendo desde pistas
@@ -111,32 +167,15 @@ const Player = ({ route }) => {
             </View>
           </View>
           <View style={styles.playerContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => skipPreviusSong()}>
               <MaterialIcons
                 name="skip-previous"
                 size={50}
                 color={colors.primary}
               />
             </TouchableOpacity>
-
-            {isPlaying ? (
-              <TouchableOpacity onPress={() => pauseSound()}>
-                <MaterialIcons
-                  name="pause-circle-filled"
-                  size={80}
-                  color={colors.primary}
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => startNewSound()}>
-                <MaterialIcons
-                  name="play-circle-filled"
-                  size={80}
-                  color={colors.primary}
-                />
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity>
+            {playAndPause}
+            <TouchableOpacity onPress={() => skipNextSong()}>
               <MaterialIcons
                 name="skip-next"
                 size={50}

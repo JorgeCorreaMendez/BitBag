@@ -1,20 +1,19 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+
 import { MaterialIcons } from "@expo/vector-icons";
 import ModalOptions from "../modal/ModalOptions";
 
 import colors from "../../constants/colors";
 
-const Song = ({ songData, onDelete }) => {
+const Song = ({ songData, onDelete, goToPlayer }) => {
   const [showOptionsModal, setShowOptionsModals] = useState(false);
-  const navigator = useNavigation();
 
   const options = [
     {
       title: "Reproducir canción",
       iconName: "play-arrow",
-      event: () => navigator.navigate("Player", { song: songData }),
+      event: () => goToPlayer(),
     },
     {
       title: "Borrar canción",
@@ -25,31 +24,33 @@ const Song = ({ songData, onDelete }) => {
 
   return (
     <View style={{ paddingBottom: 20, paddingHorizontal: 10 }}>
-      <View style={styles.container}>
-        <Image
-          style={styles.image}
-          source={require("../../../assets/default-album-art.png")}
-        />
-        <View style={styles.dataContainer}>
-          <Text numberOfLines={1} style={styles.title}>
-            {songData.name}
-          </Text>
-          <Text numberOfLines={1} style={styles.description}>
-            {songData.size} MB
-          </Text>
-        </View>
-        <TouchableOpacity onPress={() => setShowOptionsModals(true)}>
-          <View style={styles.iconContainer}>
-            <MaterialIcons name="menu" size={26} color={colors.primary} />
+      <TouchableOpacity onPress={() => goToPlayer()}>
+        <View style={styles.container}>
+          <Image
+            style={styles.image}
+            source={require("../../../assets/default-album-art.png")}
+          />
+          <View style={styles.dataContainer}>
+            <Text numberOfLines={1} style={styles.title}>
+              {songData.name}
+            </Text>
+            <Text numberOfLines={1} style={styles.description}>
+              {songData.size} MB
+            </Text>
           </View>
-        </TouchableOpacity>
-        <ModalOptions
-          DataToShow={songData}
-          options={options}
-          visible={showOptionsModal}
-          closeModal={() => setShowOptionsModals(false)}
-        />
-      </View>
+          <TouchableOpacity onPress={() => setShowOptionsModals(true)}>
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="menu" size={26} color={colors.primary} />
+            </View>
+          </TouchableOpacity>
+          <ModalOptions
+            DataToShow={songData}
+            options={options}
+            visible={showOptionsModal}
+            closeModal={() => setShowOptionsModals(false)}
+          />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

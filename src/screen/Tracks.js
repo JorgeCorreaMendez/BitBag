@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet } from "react-native";
 import { useState } from "react";
 
+import { useNavigation } from "@react-navigation/native";
 import { getDocumentAsync } from "expo-document-picker";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
@@ -42,6 +43,11 @@ const Tracks = () => {
     setSongs((currentValue) => currentValue.filter((el) => el === key));
   };
 
+  const navigator = useNavigation();
+  const goToPlayer = () => {
+    navigator.navigate("Player", { songs });
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ padding: "5%" }}>
@@ -72,9 +78,24 @@ const Tracks = () => {
           </View>
         </View>
       ) : (
-        <>
-          <SongList list={songs} onDelete={deleteSong} />
-        </>
+        <View>
+          <View style={{ height: "80%" }}>
+            <SongList
+              list={songs}
+              onDelete={deleteSong}
+              goToPlayer={goToPlayer}
+            />
+          </View>
+
+          <Button
+            title="Importar"
+            style={{
+              color: colors.primary,
+              backgroundColor: colors.superficies,
+            }}
+            onPress={importSong}
+          />
+        </View>
       )}
     </View>
   );
