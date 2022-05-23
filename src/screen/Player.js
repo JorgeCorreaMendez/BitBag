@@ -1,12 +1,47 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { useRef, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
 import colors from "../constants/colors";
 import size from "../constants/size";
 
+
 const Player = ({ route }) => {
-  const {song} = route.params
-  
+  const song = route.params?.song;
+  const [isPlaying, setIsPlaying] = useState(false);
+  const AudioPlayer = useRef(new Audio.Sound());
+
+  const startNewSound = async () => {
+    try {
+      const isLoaded = await (
+        await AudioPlayer.current.getStatusAsync()
+      ).isLoaded;
+
+      if (!isLoaded) {
+        await AudioPlayer.current.unloadAsync();
+
+        await AudioPlayer.current.loadAsync({ uri: song.uri });
+      }
+
+      await AudioPlayer.current.playAsync();
+
+      setIsPlaying(true);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const pauseSound = async () => {
+    try {
+      await AudioPlayer.current.pauseAsync();
+
+      setIsPlaying(false);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {song ? (
@@ -42,14 +77,23 @@ const Player = ({ route }) => {
               />
             </TouchableOpacity>
 
-            <TouchableOpacity>
-              <MaterialIcons
-                name="pause-circle-filled"
-                size={80}
-                color={colors.primary}
-              />
-            </TouchableOpacity>
-
+            {isPlaying ? (
+              <TouchableOpacity onPress={() => pauseSound()}>
+                <MaterialIcons
+                  name="pause-circle-filled"
+                  size={80}
+                  color={colors.primary}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => startNewSound()}>
+                <MaterialIcons
+                  name="play-circle-filled"
+                  size={80}
+                  color={colors.primary}
+                />
+              </TouchableOpacity>
+            )}
             <TouchableOpacity>
               <MaterialIcons
                 name="skip-next"
