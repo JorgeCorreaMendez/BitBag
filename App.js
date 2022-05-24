@@ -8,6 +8,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Tracks from "./src/screen/Tracks";
 import Login from "./src/screen/Login";
 import Player from "./src/screen/Player";
+import Playlist from "./src/screen/Playlist";
 
 import colors from "./src/constants/colors";
 import size from "./src/constants/size";
@@ -21,6 +22,10 @@ const tracksIcon = (
 
 const playerIcon = (
   <MaterialIcons name="play-circle-outline" size={29} color={colors.primary} />
+);
+
+const playlistIcon = (
+  <MaterialIcons name="my-library-music" size={29} color={colors.primary} />
 );
 
 export default function App() {
@@ -71,6 +76,15 @@ export default function App() {
               title: "Reproductor",
               tabBarIcon: () => playerIcon,
               headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="Playlists"
+            component={Playlist().Screen}
+            options={{
+              title: "Playlist",
+              tabBarIcon: () => playlistIcon,
+              headerRight: () => Playlist().addToPlaylistIcon(),
             }}
           />
         </Tab.Navigator>
