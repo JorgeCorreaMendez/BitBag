@@ -80,11 +80,10 @@ export default function App() {
           />
           <Tab.Screen
             name="Playlists"
-            component={Playlist().Screen}
+            component={Playlist}
             options={{
               title: "Playlist",
               tabBarIcon: () => playlistIcon,
-              headerRight: () => Playlist().addToPlaylistIcon(),
             }}
           />
         </Tab.Navigator>
