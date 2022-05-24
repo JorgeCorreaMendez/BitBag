@@ -13,7 +13,7 @@ const Song = ({ songData, onDelete, goToPlayer }) => {
     {
       title: "Reproducir canción",
       iconName: "play-arrow",
-      event: () => goToPlayer(),
+      event: () => goToPlayer(songData),
     },
     {
       title: "Borrar canción",
@@ -24,7 +24,7 @@ const Song = ({ songData, onDelete, goToPlayer }) => {
 
   return (
     <View style={{ paddingBottom: 20, paddingHorizontal: 10 }}>
-      <TouchableOpacity onPress={() => goToPlayer()}>
+      <TouchableOpacity onPress={() => goToPlayer(songData)}>
         <View style={styles.container}>
           <Image
             style={styles.image}

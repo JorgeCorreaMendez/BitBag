@@ -70,8 +70,10 @@ const Tracks = () => {
   };
 
   const navigator = useNavigation();
-  const goToPlayer = () => {
-    navigator.navigate("Player", { songs });
+  const goToPlayerWith = (song) => {
+    const startPosition = songs.indexOf(song);
+
+    navigator.navigate("Player", { songs, startPosition });
   };
 
   return (
@@ -109,7 +111,7 @@ const Tracks = () => {
             <SongList
               list={songs}
               onDelete={deleteSong}
-              goToPlayer={goToPlayer}
+              goToPlayer={goToPlayerWith}
             />
           </View>
 
