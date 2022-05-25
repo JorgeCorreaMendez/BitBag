@@ -1,6 +1,5 @@
 import { Text, View, StyleSheet } from "react-native";
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/core";
 import { auth } from "../services/firebase";
 
 import ModalAlert from "../components/modal/ModalAlert";
@@ -9,9 +8,6 @@ import Button from "../components/button/MyButton";
 
 import colors from "../constants/colors";
 import size from "../constants/size";
-
-// TODO -> Controlador de errores de firebase
-// TODO -> Cambiar diseño (Boton registrarte)
 
 const Login = () => {
   const [email, setEmail] = useState("");

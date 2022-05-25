@@ -6,7 +6,6 @@ import { getDocumentAsync } from "expo-document-picker";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 
-import SearchInputText from "../components/input/SearchInputText";
 import Button from "../components/button/MyButton";
 import SongList from "../components/item/SongList";
 import ModalAlert from "../components/modal/ModalAlert";
@@ -15,13 +14,10 @@ import SizeFileConverter from "../utils/SizeFileConverter";
 import colors from "../constants/colors";
 import size from "../constants/size";
 
-// TODO -> Ordenar canciones por fecha, nombre y duracion
-// TODO -> Añadir boton en el header para importar
-// TODO -> Añadir alerta al borrar cancion
+// TODO -> Añadir alerta al borrar cancion (no se muestra)
 
 const Tracks = () => {
   const [songs, setSongs] = useState([]);
-  const [searchText, setSearchText] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [mensageModal, setMensageModal] = useState("");
@@ -66,7 +62,7 @@ const Tracks = () => {
   };
 
   const deleteSong = (key) => {
-    setSongs((currentValue) => currentValue.filter((el) => el === key));
+    setSongs((currentValue) => currentValue.filter((el) => el.key !== key));
   };
 
   const navigator = useNavigation();
@@ -79,10 +75,13 @@ const Tracks = () => {
   return (
     <View style={styles.container}>
       <View style={{ padding: "5%" }}>
-        <SearchInputText
-          value={searchText}
-          onChange={setSearchText}
-          placeholder="Ingresa el nombre de la canción"
+        <Button
+          title="Importar"
+          style={{
+            color: colors.primary,
+            backgroundColor: colors.superficies,
+          }}
+          onPress={importSong}
         />
       </View>
 
@@ -94,35 +93,16 @@ const Tracks = () => {
               reprodúcelas ahora.
             </Text>
           </View>
-          <View style={styles.importContainer}>
-            <Button
-              title="Importar"
-              style={{
-                color: colors.primary,
-                backgroundColor: colors.superficies,
-              }}
-              onPress={importSong}
-            />
-          </View>
         </View>
       ) : (
-        <View>
-          <View style={{ height: "80%" }}>
+        <View style={{ flex: 1 }}>
+          <View style={{ height: "85%" }}>
             <SongList
               list={songs}
               onDelete={deleteSong}
               goToPlayer={goToPlayerWith}
             />
           </View>
-
-          <Button
-            title="Importar"
-            style={{
-              color: colors.primary,
-              backgroundColor: colors.superficies,
-            }}
-            onPress={importSong}
-          />
 
           <ModalAlert
             visible={showSuccessModal}
@@ -153,8 +133,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: "10%",
-    width: "100%",
-    height: "35%",
+    height: "40%",
   },
   importContainer: {
     padding: "20%",

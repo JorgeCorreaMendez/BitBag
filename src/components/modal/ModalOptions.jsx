@@ -16,61 +16,55 @@ const ModalOptions = ({ DataToShow, options, visible, closeModal }) => {
   return (
     <Modal animationType="fade" visible={visible} transparent={true}>
       <View style={styles.container}>
-        <Modal animationType="slice" visible={visible} transparent={true}>
-          <TouchableOpacity
-            onPress={() => closeModal()}
-            style={styles.modalContainer}
-          >
-            <View style={styles.configureContainer}>
-              <View style={styles.dataContainer}>
-                <View style={{ paddingHorizontal: 10 }}>
-                  <Image
-                    style={styles.image}
-                    source={require("../../../assets/default-album-art.png")}
-                  />
-                </View>
-
-                <View>
-                  <Text style={{ color: colors.primary, fontSize: size.h3 }}>
-                    {DataToShow.name}
-                  </Text>
-                  <Text style={{ color: colors.secundary, fontSize: size.h3 }}>
-                    {DataToShow.size} MB
-                  </Text>
-                </View>
+        <TouchableOpacity
+          onPress={() => closeModal()}
+          style={styles.modalContainer}
+        >
+          <View style={styles.configureContainer}>
+            <View style={styles.dataContainer}>
+              <View style={{ paddingHorizontal: 10 }}>
+                <Image
+                  style={styles.image}
+                  source={require("../../../assets/default-album-art.png")}
+                />
               </View>
-              {options.map((option) => {
-                const { title, iconName, event } = option;
 
-                return (
-                  <TouchableOpacity
-                    key={uuidv4()}
-                    onPress={() => {
-                      event();
-                      closeModal();
-                    }}
-                  >
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      <MaterialIcons
-                        name={iconName}
-                        size={40}
-                        color={colors.primary}
-                        style={{ padding: 20 }}
-                      />
-                      <Text
-                        style={{ color: colors.primary, fontSize: size.h3 }}
-                      >
-                        {title}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
+              <View>
+                <Text style={{ color: colors.primary, fontSize: size.h3 }}>
+                  {DataToShow.name}
+                </Text>
+                <Text style={{ color: colors.secundary, fontSize: size.h3 }}>
+                  {DataToShow.size} MB
+                </Text>
+              </View>
             </View>
-          </TouchableOpacity>
-        </Modal>
+            {options.map((option) => {
+              const { title, iconName, event } = option;
+
+              return (
+                <TouchableOpacity
+                  key={uuidv4()}
+                  onPress={() => {
+                    event();
+                    closeModal();
+                  }}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <MaterialIcons
+                      name={iconName}
+                      size={40}
+                      color={colors.primary}
+                      style={{ padding: 20 }}
+                    />
+                    <Text style={{ color: colors.primary, fontSize: size.h3 }}>
+                      {title}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </TouchableOpacity>
       </View>
     </Modal>
   );
