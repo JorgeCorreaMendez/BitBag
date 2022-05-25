@@ -2,6 +2,7 @@ import { Alert, View, StyleSheet } from "react-native";
 import Button from "../components/button/MyButton";
 import colors from "../constants/colors";
 import { getAuth, deleteUser } from "firebase/auth";
+import NavigateButton from "../components/button/NavigateButton";
 
 const deleteActualUser = () => {
   const user = getAuth().currentUser;
@@ -36,6 +37,20 @@ const onDeleteUser = () => {
 const Settings = () => {
   return (
     <View style={styles.container}>
+      <View style={{ padding: 20 }}>
+        <NavigateButton
+          title="Cuenta"
+          iconName="person"
+          style={{ backgroundColor: colors.superficies, color: colors.primary }}
+        />
+      </View>
+      <View style={{ padding: 20 }}>
+        <NavigateButton
+          title="Almacenamiento"
+          iconName="data-usage"
+          style={{ backgroundColor: colors.superficies, color: colors.primary }}
+        />
+      </View>
       <View style={styles.closeSessionContainer}>
         <Button
           title="Cerrar sesión"
