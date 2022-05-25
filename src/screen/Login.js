@@ -1,6 +1,5 @@
 import { Text, View, StyleSheet } from "react-native";
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/core";
 import { auth } from "../services/firebase";
 
 import ModalAlert from "../components/modal/ModalAlert";
@@ -21,8 +20,6 @@ const Login = () => {
   const [showRecoverPasswordModal, setShowRecoverPasswordModal] =
     useState(false);
   const [messageModal, setMessageModal] = useState("");
-
-  const navigation = useNavigation();
 
   const onCloseModals = () => {
     setShowErrorModal(false);
