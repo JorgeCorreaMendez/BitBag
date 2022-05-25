@@ -66,7 +66,7 @@ const Tracks = () => {
   };
 
   const deleteSong = (key) => {
-    setSongs((currentValue) => currentValue.filter((el) => el === key));
+    setSongs((currentValue) => currentValue.filter((el) => el.key !== key));
   };
 
   const navigator = useNavigation();
