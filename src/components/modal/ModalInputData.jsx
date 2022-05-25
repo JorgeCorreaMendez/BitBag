@@ -1,4 +1,5 @@
 import {
+  Platform,
   Modal,
   Text,
   TextInput,
@@ -21,39 +22,37 @@ const ModalInputData = ({
   ...props
 }) => {
   return (
-    <Modal animationType="fade" visible={visible} transparent={true}>
+    <Modal animationType="slice" visible={visible} transparent={true}>
       <View style={styles.background}>
-        <Modal animationType="slice" visible={visible} transparent={true}>
-          <TouchableOpacity onPress={() => closeModal()}>
-            <View style={styles.container}>
-              <View style={styles.modalContainer}>
-                <Text style={styles.textInfo}>{textDescription}</Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    value={value}
-                    onChangeText={(text) => onChange(text)}
-                    style={styles.textInput}
-                    placeholderTextColor={colors.primary}
-                    {...props}
+        <TouchableOpacity onPress={() => closeModal()}>
+          <View style={styles.container}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.textInfo}>{textDescription}</Text>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  value={value}
+                  onChangeText={(text) => onChange(text)}
+                  style={styles.textInput}
+                  placeholderTextColor={colors.primary}
+                  {...props}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    closeModal();
+                    onPressIconFunction();
+                  }}
+                >
+                  <MaterialIcons
+                    name={iconName}
+                    size={30}
+                    color={colors.primary}
+                    style={{ paddingLeft: 10 }}
                   />
-                  <TouchableOpacity
-                    onPress={() => {
-                      closeModal();
-                      onPressIconFunction();
-                    }}
-                  >
-                    <MaterialIcons
-                      name={iconName}
-                      size={30}
-                      color={colors.primary}
-                      style={{ paddingLeft: 10 }}
-                    />
-                  </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
-          </TouchableOpacity>
-        </Modal>
+          </View>
+        </TouchableOpacity>
       </View>
     </Modal>
   );
@@ -61,7 +60,7 @@ const ModalInputData = ({
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: "rgba(0, 0, 0, 0.50)",
+    backgroundColor: colors.superficies,
     height: "100%",
   },
   container: {

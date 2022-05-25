@@ -12,17 +12,14 @@ import firebaseUtils from "../utils/firebaseUtils";
 import colors from "../constants/colors";
 import size from "../constants/size";
 
-// TODO -> Controlador de errores de firebase
-// TODO -> Modales dejan de aparecer al utilizar handleRegister, (si pones un correo valido se arregla ??)(iOS?)
-// TODO -> TextInput de ModalInputData no abre teclado en Android
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailRecover, setEmailRecover] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showRecoverPasswordModal, setShowRecoverPasswordModal] = useState(false);
+  const [showRecoverPasswordModal, setShowRecoverPasswordModal] =
+    useState(false);
   const [messageModal, setMessageModal] = useState("");
 
   const navigation = useNavigation();
