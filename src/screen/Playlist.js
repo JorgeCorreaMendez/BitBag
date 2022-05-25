@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -11,6 +11,8 @@ import randomDataIcons from "../constants/randomDataIcons";
 import colors from "../constants/colors";
 import AddModal from "../components/modal/AddModal";
 import PlaylistList from "../components/item/PlaylistList";
+import size from "../constants/size";
+import { useNavigation } from "@react-navigation/native";
 
 const randomNameIcon = () => {
   return randomDataIcons.names[
@@ -35,17 +37,13 @@ const Playlist = () => {
     setShowAddModal(true);
   };
 
-  const createNewPlaylist = () => {
-    const existPlaylist = playlistList.find((el) => el.name === namePlaylist);
+  const navigator = useNavigation();
+  const goToPlaylistViewWith = (playlist) => {
+    const playlistData = playlistList.find((el) => el === playlist);
 
-    if (!existPlaylist && namePlaylist !== "") {
-      setPlaylistList((currentValue) => [
-        ...currentValue,
-        { key: uuidv4(), name: namePlaylist, icon, songs: [] },
-      ]);
-
-      setNamePlaylist("");
-    }
+    navigator.navigate("PlaylistView", {
+      playlistData,
+    });
   };
 
   // TODO -> Cambia el estado pero no se muestra el modal
@@ -61,9 +59,32 @@ const Playlist = () => {
     );
   };
 
+  const createNewPlaylist = () => {
+    const existPlaylist = playlistList.find((el) => el.name === namePlaylist);
+
+    if (!existPlaylist && namePlaylist !== "") {
+      setPlaylistList((currentValue) => [
+        ...currentValue,
+        { key: uuidv4(), name: namePlaylist, icon, songs: [] },
+      ]);
+
+      setNamePlaylist("");
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <PlaylistList list={playlistList} />
+      {playlistList.length === 0 ? (
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>
+            Aun no existe ninguna Playlist, pulse en el boton de abajo para
+            crear la primera.
+          </Text>
+          <Text style={styles.text}>↓</Text>
+        </View>
+      ) : (
+        <PlaylistList list={playlistList} goToPlaylist={goToPlaylistViewWith} />
+      )}
 
       <View style={styles.createContainer}>
         <Button
@@ -99,6 +120,16 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     justifyContent: "flex-end",
     alignItems: "center",
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  text: {
+    color: colors.primary,
+    fontSize: size.h2,
   },
 });
 

@@ -9,6 +9,7 @@ import Tracks from "./src/screen/Tracks";
 import Login from "./src/screen/Login";
 import Player from "./src/screen/Player";
 import Playlist from "./src/screen/Playlist";
+import PlaylistView from "./src/screen/PlaylistView";
 
 import colors from "./src/constants/colors";
 import size from "./src/constants/size";
@@ -37,14 +38,36 @@ export default function App() {
     });
   }, [auth]);
 
+  const commonStyles = {
+    headerStyle: {
+      backgroundColor: colors.background,
+    },
+    headerRightContainerStyle: {
+      paddingRight: 20,
+    },
+    headerTintColor: colors.primary,
+    headerTitleAlign: "center",
+  };
+
+  const PlaylistNav = () => {
+    return (
+      <Stack.Navigator screenOptions={commonStyles}>
+        <Stack.Screen
+          name="PlaylistList"
+          component={Playlist}
+          options={{ title: "Playlist" }}
+        />
+        <Stack.Screen name="PlaylistView" component={PlaylistView} />
+      </Stack.Navigator>
+    );
+  };
+
   return (
     <NavigationContainer>
       {!user ? (
         <Tab.Navigator
           screenOptions={{
-            headerStyle: {
-              backgroundColor: colors.background,
-            },
+            ...commonStyles,
             tabBarStyle: {
               backgroundColor: colors.superficies,
               paddingBottom: "3%",
@@ -53,11 +76,6 @@ export default function App() {
             tabBarLabelStyle: {
               fontSize: size.h4,
             },
-            headerRightContainerStyle: {
-              paddingRight: 20,
-            },
-            headerTintColor: colors.primary,
-            headerTitleAlign: "center",
             tabBarActiveTintColor: colors.primary,
           }}
         >
@@ -79,10 +97,10 @@ export default function App() {
             }}
           />
           <Tab.Screen
-            name="Playlists"
-            component={Playlist}
+            name="Playlist"
+            component={PlaylistNav}
             options={{
-              title: "Playlist",
+              headerShown: false,
               tabBarIcon: () => playlistIcon,
             }}
           />
