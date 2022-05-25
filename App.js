@@ -8,6 +8,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Tracks from "./src/screen/Tracks";
 import Login from "./src/screen/Login";
 import Player from "./src/screen/Player";
+import Setting from "./src/screen/Settings";
 
 import colors from "./src/constants/colors";
 import size from "./src/constants/size";
@@ -23,6 +24,33 @@ const playerIcon = (
   <MaterialIcons name="play-circle-outline" size={29} color={colors.primary} />
 );
 
+const settingIcon = (
+  <MaterialIcons name="settings" size={29} color={colors.primary} />
+);
+
+const commonsOptions = {
+  headerStyle: {
+    backgroundColor: colors.background,
+  },
+  headerRightContainerStyle: {
+    paddingRight: 20,
+  },
+  headerTintColor: colors.primary,
+  headerTitleAlign: "center",
+};
+
+const SettingNav = () => {
+  return (
+    <Stack.Navigator screenOptions={{ ...commonsOptions }}>
+      <Stack.Screen
+        name="SettingHome"
+        component={Setting}
+        options={{ title: "Ajustes" }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 export default function App() {
   const [user, setUser] = useState();
 
@@ -37,9 +65,7 @@ export default function App() {
       {user ? (
         <Tab.Navigator
           screenOptions={{
-            headerStyle: {
-              backgroundColor: colors.background,
-            },
+            ...commonsOptions,
             tabBarStyle: {
               backgroundColor: colors.superficies,
               paddingBottom: "3%",
@@ -48,11 +74,6 @@ export default function App() {
             tabBarLabelStyle: {
               fontSize: size.h4,
             },
-            headerRightContainerStyle: {
-              paddingRight: 20,
-            },
-            headerTintColor: colors.primary,
-            headerTitleAlign: "center",
             tabBarActiveTintColor: colors.primary,
           }}
         >
@@ -70,6 +91,14 @@ export default function App() {
             options={{
               title: "Reproductor",
               tabBarIcon: () => playerIcon,
+              headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="Settings"
+            component={SettingNav}
+            options={{
+              tabBarIcon: () => settingIcon,
               headerShown: false,
             }}
           />
