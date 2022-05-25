@@ -17,7 +17,7 @@ import size from "../constants/size";
 
 // TODO -> Ordenar canciones por fecha, nombre y duracion
 // TODO -> Añadir boton en el header para importar
-// TODO -> Añadir alerta al borrar cancion
+// TODO -> Añadir alerta al borrar cancion (no se muestra)
 
 const Tracks = () => {
   const [songs, setSongs] = useState([]);
