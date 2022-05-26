@@ -8,7 +8,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Tracks from "./src/screen/Tracks";
 import Login from "./src/screen/Login";
 import Player from "./src/screen/Player";
-import Setting from "./src/screen/Settings";
+import Setting from "./src/screen/Settings/Setting";
+import Account from "./src/screen/Settings/Account";
+import Storage from "./src/screen/Settings/Storage";
 
 import colors from "./src/constants/colors";
 import size from "./src/constants/size";
@@ -43,9 +45,19 @@ const SettingNav = () => {
   return (
     <Stack.Navigator screenOptions={{ ...commonsOptions }}>
       <Stack.Screen
-        name="SettingHome"
+        name="Home"
         component={Setting}
         options={{ title: "Ajustes" }}
+      />
+      <Stack.Screen
+        name="Account"
+        component={Account}
+        options={{ title: "Cuenta" }}
+      />
+      <Stack.Screen
+        name="Storage"
+        component={Storage}
+        options={{ title: "Almacenamiento" }}
       />
     </Stack.Navigator>
   );
@@ -62,7 +74,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {user ? (
+      {!user ? (
         <Tab.Navigator
           screenOptions={{
             ...commonsOptions,

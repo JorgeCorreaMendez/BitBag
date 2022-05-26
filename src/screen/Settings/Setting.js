@@ -1,7 +1,10 @@
 import { Alert, View, StyleSheet } from "react-native";
-import Button from "../components/button/MyButton";
-import colors from "../constants/colors";
 import { getAuth } from "firebase/auth";
+
+import NavigateButton from "../../components/button/NavigateButton";
+import Button from "../../components/button/MyButton";
+
+import colors from "../../constants/colors";
 
 const closeSession = async () => {
   try {
@@ -36,6 +39,7 @@ const Settings = () => {
         <NavigateButton
           title="Cuenta"
           iconName="person"
+          navigateTo="Account"
           style={{ backgroundColor: colors.superficies, color: colors.primary }}
         />
       </View>
@@ -43,6 +47,7 @@ const Settings = () => {
         <NavigateButton
           title="Almacenamiento"
           iconName="data-usage"
+          navigateTo="Storage"
           style={{ backgroundColor: colors.superficies, color: colors.primary }}
         />
       </View>
