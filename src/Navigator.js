@@ -19,48 +19,13 @@ import icons from "./constants/icons";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const commonsOptions = {
-  headerStyle: {
-    backgroundColor: colors.background,
-  },
-  headerRightContainerStyle: {
-    paddingRight: 20,
-  },
-  headerTintColor: colors.primary,
-  headerTitleAlign: "center",
-};
-
-const PlaylistNav = () => {
-  return (
-    <Stack.Navigator screenOptions={commonsOptions}>
-      <Stack.Screen
-        name="PlaylistList"
-        component={Playlist}
-        options={{ title: "Playlist" }}
-      />
-      <Stack.Screen name="PlaylistView" component={PlaylistView} />
-    </Stack.Navigator>
-  );
-};
-
-const SettingNav = () => {
-  return (
-    <Stack.Navigator screenOptions={{ ...commonsOptions }}>
-      <Stack.Screen
-        name="Home"
-        component={Setting}
-        options={{ title: "Ajustes" }}
-      />
-      <Stack.Screen
-        name="Account"
-        component={Account}
-        options={{ title: "Cuenta" }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const Navigator = ({ songs, importSong, deleteSong }) => {
+const Navigator = ({
+  songs,
+  importSong,
+  deleteSong,
+  playlistList,
+  createNewPlaylist,
+}) => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -68,6 +33,52 @@ const Navigator = ({ songs, importSong, deleteSong }) => {
       setUser(firebaseUser);
     });
   }, [auth]);
+
+  const commonsOptions = {
+    headerStyle: {
+      backgroundColor: colors.background,
+    },
+    headerRightContainerStyle: {
+      paddingRight: 20,
+    },
+    headerTintColor: colors.primary,
+    headerTitleAlign: "center",
+  };
+
+  const PlaylistNav = () => {
+    return (
+      <Stack.Navigator screenOptions={commonsOptions}>
+        <Stack.Screen
+          name="PlaylistList"
+          children={() => (
+            <Playlist
+              playlistList={playlistList}
+              createNewPlaylist={createNewPlaylist}
+            />
+          )}
+          options={{ title: "Playlist" }}
+        />
+        <Stack.Screen name="PlaylistView" component={PlaylistView} />
+      </Stack.Navigator>
+    );
+  };
+
+  const SettingNav = () => {
+    return (
+      <Stack.Navigator screenOptions={{ ...commonsOptions }}>
+        <Stack.Screen
+          name="Home"
+          component={Setting}
+          options={{ title: "Ajustes" }}
+        />
+        <Stack.Screen
+          name="Account"
+          component={Account}
+          options={{ title: "Cuenta" }}
+        />
+      </Stack.Navigator>
+    );
+  };
 
   return (
     <NavigationContainer>

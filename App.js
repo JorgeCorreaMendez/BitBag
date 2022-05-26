@@ -12,6 +12,9 @@ import colors from "./src/constants/colors";
 
 export default function App() {
   const [songs, setSongs] = useState([]);
+
+  const [playlistList, setPlaylistList] = useState([]);
+
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [mensageModal, setMensageModal] = useState("");
@@ -59,12 +62,25 @@ export default function App() {
     setSongs((currentValue) => currentValue.filter((el) => el.key !== key));
   };
 
+  const createNewPlaylist = (name, icon) => {
+    const existPlaylist = playlistList.find((el) => el.name === name);
+
+    if (!existPlaylist && name !== "") {
+      setPlaylistList((currentValue) => [
+        ...currentValue,
+        { key: uuidv4(), name, icon, songs: [] },
+      ]);
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Navigator
         songs={songs}
         importSong={importSong}
         deleteSong={deleteSong}
+        playlistList={playlistList}
+        createNewPlaylist={createNewPlaylist}
       />
 
       <ModalAlert

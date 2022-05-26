@@ -21,43 +21,38 @@ const AddModal = ({
   return (
     <Modal animationType="fade" visible={visible} transparent={true}>
       <View style={styles.background}>
-        <Modal animationType="slice" visible={visible} transparent={true}>
-          <TouchableOpacity
-            onPress={() => closeModal()}
-            style={styles.container}
-          >
-            <View style={styles.AddContainer}>
-              <View
-                style={[styles.iconContainer, { backgroundColor: icon.color }]}
-              >
-                <MaterialIcons
-                  name={icon.name}
-                  size={50}
-                  color={colors.primary}
-                />
-              </View>
-              <TextInput
-                value={value}
-                onChangeText={(text) => onChange(text)}
-                style={styles.input}
-                {...props}
+        <TouchableOpacity onPress={() => closeModal()} style={styles.container}>
+          <View style={styles.AddContainer}>
+            <View
+              style={[styles.iconContainer, { backgroundColor: icon.color }]}
+            >
+              <MaterialIcons
+                name={icon.name}
+                size={50}
+                color={colors.primary}
               />
-
-              <TouchableOpacity
-                onPress={() => {
-                  event();
-                  closeModal();
-                }}
-              >
-                <MaterialIcons
-                  name="add-circle-outline"
-                  size={50}
-                  color={colors.primary}
-                />
-              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </Modal>
+            <TextInput
+              value={value}
+              onChangeText={(text) => onChange(text)}
+              style={styles.input}
+              {...props}
+            />
+
+            <TouchableOpacity
+              onPress={() => {
+                event();
+                closeModal();
+              }}
+            >
+              <MaterialIcons
+                name="add-circle-outline"
+                size={50}
+                color={colors.primary}
+              />
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
       </View>
     </Modal>
   );
@@ -65,7 +60,7 @@ const AddModal = ({
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: "rgba(0, 0, 0, 0.50)",
+    backgroundColor: colors.superficies,
     height: "100%",
   },
   container: {

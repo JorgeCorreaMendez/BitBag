@@ -26,8 +26,7 @@ const randomColorIcon = () => {
   ];
 };
 
-const Playlist = () => {
-  const [playlistList, setPlaylistList] = useState([]);
+const Playlist = ({ playlistList, createNewPlaylist }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [namePlaylist, setNamePlaylist] = useState("");
   const [icon, setIcon] = useState({ name: "", color: "" });
@@ -44,32 +43,6 @@ const Playlist = () => {
     navigator.navigate("PlaylistView", {
       playlistData,
     });
-  };
-
-  // TODO -> Cambia el estado pero no se muestra el modal
-  const addToPlaylistIcon = () => {
-    return (
-      <TouchableOpacity onPress={() => setShowAddModal(true)}>
-        <MaterialIcons
-          name="add-circle-outline"
-          size={30}
-          color={colors.primary}
-        />
-      </TouchableOpacity>
-    );
-  };
-
-  const createNewPlaylist = () => {
-    const existPlaylist = playlistList.find((el) => el.name === namePlaylist);
-
-    if (!existPlaylist && namePlaylist !== "") {
-      setPlaylistList((currentValue) => [
-        ...currentValue,
-        { key: uuidv4(), name: namePlaylist, icon, songs: [] },
-      ]);
-
-      setNamePlaylist("");
-    }
   };
 
   return (
@@ -101,7 +74,7 @@ const Playlist = () => {
         value={namePlaylist}
         onChange={setNamePlaylist}
         visible={showAddModal}
-        event={createNewPlaylist}
+        event={() => createNewPlaylist(namePlaylist, icon)}
         closeModal={() => setShowAddModal(false)}
         icon={icon}
         placeholder="playlist name"
