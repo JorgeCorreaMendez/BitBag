@@ -2,7 +2,7 @@ import { Text, View, StyleSheet } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-import PlaylistList from "../../components/item/PlaylistList";
+import Playlists from "../../components/item/Playlists";
 import Button from "../../components/button/MyButton";
 import AddModal from "../../components/modal/AddModal";
 
@@ -52,7 +52,7 @@ const PlaylistsView = ({ playlists, createNewPlaylist }) => {
           <Text style={styles.text}>↓</Text>
         </View>
       ) : (
-        <PlaylistList list={playlists} goToPlaylist={goToPlaylistViewWith} />
+        <Playlists list={playlists} goToPlaylist={goToPlaylistViewWith} />
       )}
 
       <View style={styles.createContainer}>

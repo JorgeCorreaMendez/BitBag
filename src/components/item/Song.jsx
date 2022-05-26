@@ -6,7 +6,7 @@ import ModalOptions from "../modal/ModalOptions";
 
 import colors from "../../constants/colors";
 
-const Song = ({ songData, onDelete, goToPlayer }) => {
+const Song = ({ songData, onDelete, goToPlayer, addSongToPlaylist }) => {
   const [showOptionsModal, setShowOptionsModals] = useState(false);
 
   const options = [
@@ -14,6 +14,11 @@ const Song = ({ songData, onDelete, goToPlayer }) => {
       title: "Reproducir canción",
       iconName: "play-arrow",
       event: () => goToPlayer(songData),
+    },
+    {
+      title: "Añadir a la playlist",
+      iconName: "playlist-add",
+      event: () => addSongToPlaylist(songData),
     },
     {
       title: "Borrar canción",

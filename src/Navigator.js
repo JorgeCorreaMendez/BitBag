@@ -25,6 +25,7 @@ const Navigator = ({
   deleteSong,
   playlists,
   createNewPlaylist,
+  addSongToPlaylist,
 }) => {
   const [user, setUser] = useState({});
 
@@ -49,7 +50,7 @@ const Navigator = ({
     return (
       <Stack.Navigator screenOptions={commonsOptions}>
         <Stack.Screen
-          name="PlaylistList"
+          name="PlaylistsView"
           children={() => (
             <PlaylistsView
               playlists={playlists}
@@ -58,7 +59,11 @@ const Navigator = ({
           )}
           options={{ title: "Playlist" }}
         />
-        <Stack.Screen name="PlaylistView" component={Playlist} />
+        <Stack.Screen
+          name="PlaylistView"
+          component={Playlist}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     );
   };
@@ -82,7 +87,7 @@ const Navigator = ({
 
   return (
     <NavigationContainer>
-      {user ? (
+      {!user ? (
         <Tab.Navigator
           screenOptions={{
             ...commonsOptions,
@@ -104,6 +109,7 @@ const Navigator = ({
                 songs={songs}
                 importSong={importSong}
                 deleteSong={deleteSong}
+                addSongToPlaylist={addSongToPlaylist}
               />
             )}
             options={{

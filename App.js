@@ -9,11 +9,14 @@ import ModalAlert from "./src/components/modal/ModalAlert";
 
 import SizeFileConverter from "./src/utils/sizeFileConverter";
 import colors from "./src/constants/colors";
+import AddToListModal from "./src/components/modal/AddToListModal";
 
 export default function App() {
   const [songs, setSongs] = useState([]);
   const [playlists, setPlaylists] = useState([]);
+  const [songToAddPlaylist, setSongToAddPlaylist] = useState({});
 
+  const [showAddToListModal, setShowAddToListModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [mensageModal, setMensageModal] = useState("");
@@ -72,6 +75,24 @@ export default function App() {
     }
   };
 
+  const getSongToAddPlaylist = (songData) => {
+    setShowAddToListModal(true);
+    setSongToAddPlaylist(songData);
+  };
+
+  const addSongToPlaylist = (playlist) => {
+    setShowAddToListModal(false);
+    setPlaylists((currentValue) => {
+      playlist.songs.push(songToAddPlaylist);
+
+      currentValue
+        .filter((actualPlaylist) => actualPlaylist === playlist)
+        .unshift(playlist);
+
+      return currentValue;
+    });
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Navigator
@@ -80,6 +101,15 @@ export default function App() {
         deleteSong={deleteSong}
         playlists={playlists}
         createNewPlaylist={createNewPlaylist}
+        addSongToPlaylist={getSongToAddPlaylist}
+      />
+
+      <AddToListModal
+        title="Añadir a la playlist"
+        playlists={playlists}
+        visible={showAddToListModal}
+        closeModal={() => setShowAddToListModal(false)}
+        onPressItem={addSongToPlaylist}
       />
 
       <ModalAlert

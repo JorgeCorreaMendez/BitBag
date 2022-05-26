@@ -9,7 +9,7 @@ import size from "../constants/size";
 
 // TODO -> Añadir alerta al borrar cancion (no se muestra)
 
-const Tracks = ({ songs, importSong, deleteSong }) => {
+const Tracks = ({ songs, importSong, deleteSong, addSongToPlaylist }) => {
   const navigator = useNavigation();
   const goToPlayerWith = (song) => {
     const startPosition = songs.indexOf(song);
@@ -46,6 +46,7 @@ const Tracks = ({ songs, importSong, deleteSong }) => {
               list={songs}
               onDelete={deleteSong}
               goToPlayer={goToPlayerWith}
+              addSongToPlaylist={addSongToPlaylist}
             />
           </View>
         </View>

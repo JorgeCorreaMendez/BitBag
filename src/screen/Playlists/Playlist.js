@@ -36,13 +36,13 @@ const Playlist = ({ route }) => {
         </View>
       </View>
       <View style={styles.songsContainer}>
-        {playlistData.length === 0 ? (
-          <SongList />
-        ) : (
+        {playlistData.songs.length === 0 ? (
           <Text style={{ color: colors.primary, fontSize: size.h2 }}>
             Esta Playlist esta vacia, puedes añadir canciones desde la pantalla
             de pistas
           </Text>
+        ) : (
+          <SongList list={playlistData.songs} />
         )}
       </View>
     </View>
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
     paddingHorizontal: "5%",
+    paddingTop: "10%",
   },
   dataContainer: {
     alignItems: "center",
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: 20,
   },
 });
 
