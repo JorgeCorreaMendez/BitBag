@@ -1,104 +1,26 @@
-import { useState, useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { auth } from "./src/services/firebase";
-import { MaterialIcons } from "@expo/vector-icons";
+import { View } from "react-native";
+import { useState } from "react";
 import { getDocumentAsync } from "expo-document-picker";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 
-import Tracks from "./src/screen/Tracks";
-import Login from "./src/screen/Login";
-import Player from "./src/screen/Player";
-import Playlist from "./src/screen/Playlist";
-import PlaylistView from "./src/screen/PlaylistView";
-import Setting from "./src/screen/Settings/Setting";
-import Account from "./src/screen/Settings/Account";
+import Navigator from "./src/Navigator";
+import ModalAlert from "./src/components/modal/ModalAlert";
 
-import SizeFileConverter from "./src/utils/SizeFileConverter";
+import SizeFileConverter from "./src/utils/sizeFileConverter";
 import colors from "./src/constants/colors";
-import size from "./src/constants/size";
-
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
-
-const tracksIcon = (
-  <MaterialIcons name="music-note" size={29} color={colors.primary} />
-);
-
-const playerIcon = (
-  <MaterialIcons name="play-circle-outline" size={29} color={colors.primary} />
-);
-
-const playlistIcon = (
-  <MaterialIcons name="my-library-music" size={29} color={colors.primary} />
-);
-
-const settingIcon = (
-  <MaterialIcons name="settings" size={29} color={colors.primary} />
-);
-
-const commonsOptions = {
-  headerStyle: {
-    backgroundColor: colors.background,
-  },
-  headerRightContainerStyle: {
-    paddingRight: 20,
-  },
-  headerTintColor: colors.primary,
-  headerTitleAlign: "center",
-};
-
-const SettingNav = () => {
-  return (
-    <Stack.Navigator screenOptions={{ ...commonsOptions }}>
-      <Stack.Screen
-        name="Home"
-        component={Setting}
-        options={{ title: "Ajustes" }}
-      />
-      <Stack.Screen
-        name="Account"
-        component={Account}
-        options={{ title: "Cuenta" }}
-      />
-    </Stack.Navigator>
-  );
-};
 
 export default function App() {
-  const [user, setUser] = useState({});
   const [songs, setSongs] = useState([]);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [mensageModal, setMensageModal] = useState("");
 
-  useEffect(() => {
-    auth.onAuthStateChanged((firebaseUser) => {
-      setUser(firebaseUser);
-    });
-  }, [auth]);
+  const onCloseModals = () => {
+    setShowErrorModal(false);
+    setShowSuccessModal(false);
 
-  const commonStyles = {
-    headerStyle: {
-      backgroundColor: colors.background,
-    },
-    headerRightContainerStyle: {
-      paddingRight: 20,
-    },
-    headerTintColor: colors.primary,
-    headerTitleAlign: "center",
-  };
-
-  const PlaylistNav = () => {
-    return (
-      <Stack.Navigator screenOptions={commonStyles}>
-        <Stack.Screen
-          name="PlaylistList"
-          component={Playlist}
-          options={{ title: "Playlist" }}
-        />
-        <Stack.Screen name="PlaylistView" component={PlaylistView} />
-      </Stack.Navigator>
-    );
+    setMensageModal("");
   };
 
   const importSong = async () => {
@@ -120,10 +42,17 @@ export default function App() {
               uri: song.uri,
             },
           ]);
+          setMensageModal("Se ha importado la cancion a la lista");
+          setShowSuccessModal(true);
         } else {
+          setMensageModal("La canción ya se encuentra en la lista");
+          setShowErrorModal(true);
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      setMensageModal(`Error al importar la canción, codigo ${err.code}`);
+      setShowErrorModal(true);
+    }
   };
 
   const deleteSong = (key) => {
@@ -131,72 +60,27 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer>
-      {!user ? (
-        <Tab.Navigator
-          screenOptions={{
-            ...commonStyles,
-            tabBarStyle: {
-              backgroundColor: colors.superficies,
-              paddingBottom: "3%",
-              height: "9%",
-            },
-            tabBarLabelStyle: {
-              fontSize: size.h4,
-            },
-            tabBarActiveTintColor: colors.primary,
-          }}
-        >
-          <Tab.Screen
-            name="Tracks"
-            children={() => (
-              <Tracks
-                songs={songs}
-                importSong={importSong}
-                deleteSong={deleteSong}
-              />
-            )}
-            options={{
-              title: "Pistas",
-              tabBarIcon: () => tracksIcon,
-            }}
-          />
-          <Tab.Screen
-            name="Player"
-            component={Player}
-            options={{
-              title: "Reproductor",
-              tabBarIcon: () => playerIcon,
-              headerShown: false,
-            }}
-          />
-          <Tab.Screen
-            name="Playlist"
-            component={PlaylistNav}
-            options={{
-              headerShown: false,
-              tabBarIcon: () => playlistIcon,
-            }}
-          />
+    <View style={{ flex: 1 }}>
+      <Navigator
+        songs={songs}
+        importSong={importSong}
+        deleteSong={deleteSong}
+      />
 
-          <Tab.Screen
-            name="Settings"
-            component={SettingNav}
-            options={{
-              tabBarIcon: () => settingIcon,
-              headerShown: false,
-            }}
-          />
-        </Tab.Navigator>
-      ) : (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Login"
-            options={{ headerShown: false }}
-            component={Login}
-          />
-        </Stack.Navigator>
-      )}
-    </NavigationContainer>
+      <ModalAlert
+        visible={showSuccessModal}
+        closeModal={onCloseModals}
+        text={mensageModal}
+        iconName="check-circle"
+        color={colors.success}
+      />
+      <ModalAlert
+        visible={showErrorModal}
+        closeModal={onCloseModals}
+        text={mensageModal}
+        iconName="alert-circle"
+        color={colors.error}
+      />
+    </View>
   );
 }
