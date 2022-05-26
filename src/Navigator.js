@@ -7,8 +7,8 @@ import { auth } from "./services/firebase";
 import Tracks from "./screen/Tracks";
 import Login from "./screen/Login";
 import Player from "./screen/Player";
-import Playlist from "./screen/Playlist";
-import PlaylistView from "./screen/PlaylistView";
+import PlaylistsView from "./screen/Playlists/PlaylistsView";
+import Playlist from "./screen/Playlists/Playlist";
 import Setting from "./screen/Settings/Setting";
 import Account from "./screen/Settings/Account";
 
@@ -23,7 +23,7 @@ const Navigator = ({
   songs,
   importSong,
   deleteSong,
-  playlistList,
+  playlists,
   createNewPlaylist,
 }) => {
   const [user, setUser] = useState({});
@@ -51,14 +51,14 @@ const Navigator = ({
         <Stack.Screen
           name="PlaylistList"
           children={() => (
-            <Playlist
-              playlistList={playlistList}
+            <PlaylistsView
+              playlists={playlists}
               createNewPlaylist={createNewPlaylist}
             />
           )}
           options={{ title: "Playlist" }}
         />
-        <Stack.Screen name="PlaylistView" component={PlaylistView} />
+        <Stack.Screen name="PlaylistView" component={Playlist} />
       </Stack.Navigator>
     );
   };

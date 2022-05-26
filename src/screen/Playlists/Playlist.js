@@ -1,10 +1,11 @@
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import SongList from "../components/item/SongList.jsx";
-import colors from "../constants/colors";
-import size from "../constants/size";
 
-const PlaylistView = ({ route }) => {
+import SongList from "../../components/item/SongList.jsx";
+import colors from "../../constants/colors";
+import size from "../../constants/size";
+
+const Playlist = ({ route }) => {
   const { playlistData } = route.params;
   const icon = playlistData.icon;
 
@@ -90,4 +91,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlaylistView;
+export default Playlist;
