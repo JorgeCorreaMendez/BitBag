@@ -1,10 +1,8 @@
 import { Text, View, StyleSheet } from "react-native";
-import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import Button from "../components/button/MyButton";
 import SongList from "../components/item/SongList";
-import ModalAlert from "../components/modal/ModalAlert";
 
 import colors from "../constants/colors";
 import size from "../constants/size";
@@ -12,17 +10,6 @@ import size from "../constants/size";
 // TODO -> Añadir alerta al borrar cancion (no se muestra)
 
 const Tracks = ({ songs, importSong, deleteSong }) => {
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [mensageModal, setMensageModal] = useState("");
-
-  const onCloseModals = () => {
-    setShowErrorModal(false);
-    setShowSuccessModal(false);
-
-    setMensageModal("");
-  };
-
   const navigator = useNavigation();
   const goToPlayerWith = (song) => {
     const startPosition = songs.indexOf(song);
@@ -61,21 +48,6 @@ const Tracks = ({ songs, importSong, deleteSong }) => {
               goToPlayer={goToPlayerWith}
             />
           </View>
-
-          <ModalAlert
-            visible={showSuccessModal}
-            closeModal={onCloseModals}
-            text={mensageModal}
-            iconName="check-circle"
-            color={colors.success}
-          />
-          <ModalAlert
-            visible={showErrorModal}
-            closeModal={onCloseModals}
-            text={mensageModal}
-            iconName="alert-circle"
-            color={colors.error}
-          />
         </View>
       )}
     </View>
