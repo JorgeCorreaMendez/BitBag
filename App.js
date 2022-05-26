@@ -4,6 +4,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { auth } from "./src/services/firebase";
 import { MaterialIcons } from "@expo/vector-icons";
+import { getDocumentAsync } from "expo-document-picker";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 import Tracks from "./src/screen/Tracks";
 import Login from "./src/screen/Login";
@@ -13,6 +16,7 @@ import PlaylistView from "./src/screen/PlaylistView";
 import Setting from "./src/screen/Settings/Setting";
 import Account from "./src/screen/Settings/Account";
 
+import SizeFileConverter from "./src/utils/SizeFileConverter";
 import colors from "./src/constants/colors";
 import size from "./src/constants/size";
 
@@ -65,6 +69,7 @@ const SettingNav = () => {
 
 export default function App() {
   const [user, setUser] = useState({});
+  const [songs, setSongs] = useState([]);
 
   useEffect(() => {
     auth.onAuthStateChanged((firebaseUser) => {
@@ -96,9 +101,38 @@ export default function App() {
     );
   };
 
+  const importSong = async () => {
+    try {
+      const song = await getDocumentAsync({ type: "audio/mpeg" });
+
+      if (song.type === "success") {
+        const isSongInPlaylist = songs.some(
+          (el) => el.name + ".mp3" === song.name
+        );
+
+        if (!isSongInPlaylist) {
+          setSongs((currentValue) => [
+            ...currentValue,
+            {
+              key: uuidv4(),
+              name: song.name.replace(".mp3", ""),
+              size: SizeFileConverter.getMBFrom(song.size),
+              uri: song.uri,
+            },
+          ]);
+        } else {
+        }
+      }
+    } catch (err) {}
+  };
+
+  const deleteSong = (key) => {
+    setSongs((currentValue) => currentValue.filter((el) => el.key !== key));
+  };
+
   return (
     <NavigationContainer>
-      {user ? (
+      {!user ? (
         <Tab.Navigator
           screenOptions={{
             ...commonStyles,
@@ -115,7 +149,13 @@ export default function App() {
         >
           <Tab.Screen
             name="Tracks"
-            component={Tracks}
+            children={() => (
+              <Tracks
+                songs={songs}
+                importSong={importSong}
+                deleteSong={deleteSong}
+              />
+            )}
             options={{
               title: "Pistas",
               tabBarIcon: () => tracksIcon,
