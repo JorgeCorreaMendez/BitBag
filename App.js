@@ -52,7 +52,7 @@ const SettingNav = () => {
 };
 
 export default function App() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     auth.onAuthStateChanged((firebaseUser) => {

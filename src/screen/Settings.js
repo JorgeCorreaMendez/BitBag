@@ -1,34 +1,29 @@
 import { Alert, View, StyleSheet } from "react-native";
 import Button from "../components/button/MyButton";
 import colors from "../constants/colors";
-import { getAuth, deleteUser } from "firebase/auth";
-import NavigateButton from "../components/button/NavigateButton";
+import { getAuth } from "firebase/auth";
 
-const deleteActualUser = () => {
-  const user = getAuth().currentUser;
-
-  deleteUser(user)
-    .then(() => {
-      console.log("Se ha elimina el usuario");
-    })
-    .catch((err) => {
-      console.error("Se ha producido un error:" + err);
-    });
+const closeSession = async () => {
+  try {
+    getAuth().signOut();
+  } catch (err) {
+    console.error("Error mientaras se cerraba la sesión" + err);
+  }
 };
 
-const onDeleteUser = () => {
+const AlertCloseSession = () => {
   Alert.alert(
-    "¿Quiere eliminar la cuenta?",
-    "Si borra su cuenta perdera todos los datos de la misma ¿Deseas continuar?",
+    "¿Quiere cerrar la sesión?",
+    "Es posible que sus datos de pierdan con el cierre de la sesión ¿Deseas continuar?",
     [
       {
         text: "Cancelar",
         style: "cancel",
       },
       {
-        text: "Eliminar",
+        text: "Salir",
         style: "destructive",
-        onPress: () => deleteActualUser(),
+        onPress: () => closeSession(),
       },
     ]
   );
@@ -55,7 +50,7 @@ const Settings = () => {
         <Button
           title="Cerrar sesión"
           style={styles.closeSessionButton}
-          onPress={() => onDeleteUser()}
+          onPress={() => AlertCloseSession()}
         />
       </View>
     </View>
