@@ -7,10 +7,7 @@ import Time from "../utils/Time";
 import colors from "../constants/colors";
 import size from "../constants/size";
 
-// TODO -> setInterval sigue teniendo Excessive number of pending callbacks pero solo con varias canciones
 // TODO -> problema en la posición de la playlist al seleccionar una cancion y la saltar
-// TODO -> reproducir la siguiente cancíon al terminar la actual, didJustFinish no se actualiza
-// TODO -> refrescar la playlist en la screen reproductor cuando se añada una nueva canción
 
 const Player = ({ route }) => {
   const playlist = route.params?.songs;
@@ -18,42 +15,39 @@ const Player = ({ route }) => {
 
   const [positionPlaylist, setPositionPlaylist] = useState(startPosition);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [durationSong, setDurationSong] = useState(0);
   const [positionSong, setPositionSong] = useState(0);
+  const [durationSong, setDurationSong] = useState(0);
   const AudioPlayer = useRef(new Audio.Sound());
 
-  const moveToNextPositionPlaylist = () => {
-    setPositionPlaylist((currentValue) => (currentValue + 1) % playlist.length);
-  };
-
-  const moveToPreviusPositionPlaylist = () => {
-    setPositionPlaylist((currentValue) => (currentValue - 1) % playlist.length);
-  };
-
   useEffect(() => {
-    setPositionPlaylist(startPosition);
-    startNewSound();
+    if (playlist) {
+      setPositionPlaylist(startPosition);
+
+      startNewSound();
+    }
   }, [route]);
 
   useEffect(() => {
     setInterval(() => {
-      const interval = AudioPlayer.current.getStatusAsync().then((res) => {
+      AudioPlayer.current.getStatusAsync().then((res) => {
         if (res.isLoaded) {
           setPositionSong(res.positionMillis);
         }
-      }, 1000);
+      });
+    }, 1000);
 
-      // const interval2 = AudioPlayer.current.getStatusAsync().then((res) => {
-      //   if (res.isLoaded) {
-      //     if (res.didJustFinish) {
-      //       skipNextSong();
-      //     }
-      //   }
-      // }, 1000);
+    setInterval(() => {
+      AudioPlayer.current.getStatusAsync().then((res) => {
+        if (res.isLoaded) {
+          // positionMillis no llega a la duracion total de milisegundos
+          const durationMillis = parseInt(res.playableDurationMillis) - 50;
 
-      clearTimeout(interval);
-      //clearTimeout(interval2);
-    });
+          if (res.positionMillis >= durationMillis) {
+            skipNextSong();
+          }
+        }
+      });
+    }, 5000);
   }, []);
 
   const startNewSound = async () => {
@@ -102,7 +96,9 @@ const Player = ({ route }) => {
     try {
       await AudioPlayer.current.unloadAsync();
 
-      moveToPreviusPositionPlaylist();
+      setPositionPlaylist(
+        (currentValue) => (currentValue - 1) % playlist.length
+      );
       startNewSound();
     } catch (err) {
       console.error(err);
@@ -113,7 +109,10 @@ const Player = ({ route }) => {
     try {
       await AudioPlayer.current.unloadAsync();
 
-      moveToNextPositionPlaylist();
+      await setPositionPlaylist(
+        (currentValue) => (currentValue + 1) % playlist.length
+      );
+
       startNewSound();
     } catch (err) {
       console.error(err);

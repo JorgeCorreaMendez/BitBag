@@ -1,44 +1,72 @@
 import { Text, View, StyleSheet } from "react-native";
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/core";
 import { auth } from "../services/firebase";
 
 import ModalAlert from "../components/modal/ModalAlert";
+import ModalInputData from "../components/modal/ModalInputData";
 import InputText from "../components/input/InputTextWithIcon";
 import Button from "../components/button/MyButton";
 
+import firebaseUtils from "../utils/firebaseUtils";
 import colors from "../constants/colors";
 import size from "../constants/size";
-
-// TODO -> Controlador de errores de firebase
-// TODO -> Cambiar diseño (Boton registrarte)
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailRecover, setEmailRecover] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [mensageModal, setMensageModal] = useState("");
+  const [showRecoverPasswordModal, setShowRecoverPasswordModal] =
+    useState(false);
+  const [messageModal, setMessageModal] = useState("");
 
   const onCloseModals = () => {
     setShowErrorModal(false);
     setShowSuccessModal(false);
 
-    setMensageModal("");
+    setMessageModal("");
   };
 
   const handleSingUp = () => {
-    auth.createUserWithEmailAndPassword(email, password).catch((err) => {
-      setMensageModal(err.message);
-      setShowErrorModal(true);
-    });
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        navigation.navigate("Tracks");
+      })
+      .catch((err) => {
+        setMessageModal(firebaseUtils.getCustomErrorMessage(err.code));
+        setShowErrorModal(true);
+      });
   };
 
   const handleLogin = () => {
-    auth.signInWithEmailAndPassword(email, password).catch((err) => {
-      setMensageModal(err.message);
-      setShowErrorModal(true);
-    });
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        navigation.navigate("Tracks");
+      })
+      .catch((err) => {
+        setMessageModal(firebaseUtils.getCustomErrorMessage(err.code));
+        setShowErrorModal(true);
+      });
+  };
+
+  const handleRecoverPassword = () => {
+    auth
+      .sendPasswordResetEmail(emailRecover)
+      .then(() => {
+        setMessageModal(
+          "Se ha enviado el correo, compruebe su bandeja de entrada"
+        );
+        setShowSuccessModal(true);
+      })
+      .catch((err) => {
+        setMessageModal(firebaseUtils.getCustomErrorMessage(err.code));
+        setShowErrorModal(true);
+      });
+
+    setEmailRecover("");
   };
 
   return (
@@ -71,6 +99,13 @@ const Login = () => {
           onPress={handleLogin}
         />
       </View>
+      <View style={styles.lostPasswordContainer}>
+        <Button
+          title="¿Has perdido la contraseña?"
+          style={styles.lostPasswordText}
+          onPress={() => setShowRecoverPasswordModal(true)}
+        />
+      </View>
       <View style={styles.separatorContainer}>
         <View style={styles.hr} />
 
@@ -78,32 +113,39 @@ const Login = () => {
         <View style={styles.hr} />
       </View>
 
-      <View style={styles.otherOptionsContainer}>
-        <Text style={styles.otherOptionsText}>¿No tienes cuenta ?</Text>
+      <View style={styles.SingUpContainer}>
         <Button
           title="Registrate"
-          style={styles.otherOptionsButton}
+          style={styles.SignUpButton}
           onPress={() => handleSingUp()}
         />
-      </View>
-      <View style={styles.otherOptionsContainer}>
-        <Text style={styles.otherOptionsText}>¿Has perdido la contraseña?</Text>
-        <Button title="Recuperar" style={styles.otherOptionsButton} />
       </View>
       <View>
         <ModalAlert
           visible={showSuccessModal}
           closeModal={onCloseModals}
-          text={mensageModal}
+          text={messageModal}
           iconName="check-circle"
           color={colors.success}
         />
         <ModalAlert
           visible={showErrorModal}
           closeModal={onCloseModals}
-          text={mensageModal}
+          text={messageModal}
           iconName="alert-circle"
           color={colors.error}
+        />
+
+        <ModalInputData
+          visible={showRecoverPasswordModal}
+          closeModal={() => setShowRecoverPasswordModal(false)}
+          value={emailRecover}
+          onChange={setEmailRecover}
+          onPressIconFunction={handleRecoverPassword}
+          iconName="send"
+          textDescription="Introduzca su correo para poder enviarle un metodo de recoperación."
+          placeholder="Correo electronico"
+          keyboardType="email-address"
         />
       </View>
     </View>
@@ -157,21 +199,28 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.secundary,
   },
-  otherOptionsContainer: {
+  lostPasswordContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    paddingVertical: "5%",
+    paddingTop: "10%",
   },
-  otherOptionsButton: {
+  SingUpContainer: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: "15%",
+  },
+  SignUpButton: {
     backgroundColor: colors.superficies,
     color: colors.primary,
-    paddingHorizontal: 20,
+    justifyContent: "center",
+    width: "100%",
+    height: "50%",
   },
-  otherOptionsText: {
+
+  lostPasswordText: {
     color: colors.primary,
     fontSize: size.h2,
-    width: "50%",
   },
 });
 

@@ -10,6 +10,8 @@ import Login from "./src/screen/Login";
 import Player from "./src/screen/Player";
 import Playlist from "./src/screen/Playlist";
 import PlaylistView from "./src/screen/PlaylistView";
+import Setting from "./src/screen/Settings/Setting";
+import Account from "./src/screen/Settings/Account";
 
 import colors from "./src/constants/colors";
 import size from "./src/constants/size";
@@ -29,8 +31,40 @@ const playlistIcon = (
   <MaterialIcons name="my-library-music" size={29} color={colors.primary} />
 );
 
+const settingIcon = (
+  <MaterialIcons name="settings" size={29} color={colors.primary} />
+);
+
+const commonsOptions = {
+  headerStyle: {
+    backgroundColor: colors.background,
+  },
+  headerRightContainerStyle: {
+    paddingRight: 20,
+  },
+  headerTintColor: colors.primary,
+  headerTitleAlign: "center",
+};
+
+const SettingNav = () => {
+  return (
+    <Stack.Navigator screenOptions={{ ...commonsOptions }}>
+      <Stack.Screen
+        name="Home"
+        component={Setting}
+        options={{ title: "Ajustes" }}
+      />
+      <Stack.Screen
+        name="Account"
+        component={Account}
+        options={{ title: "Cuenta" }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 export default function App() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     auth.onAuthStateChanged((firebaseUser) => {
@@ -64,7 +98,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {!user ? (
+      {user ? (
         <Tab.Navigator
           screenOptions={{
             ...commonStyles,
@@ -102,6 +136,15 @@ export default function App() {
             options={{
               headerShown: false,
               tabBarIcon: () => playlistIcon,
+            }}
+          />
+
+          <Tab.Screen
+            name="Settings"
+            component={SettingNav}
+            options={{
+              tabBarIcon: () => settingIcon,
+              headerShown: false,
             }}
           />
         </Tab.Navigator>
