@@ -43,14 +43,6 @@ const Settings = () => {
           style={{ backgroundColor: colors.superficies, color: colors.primary }}
         />
       </View>
-      <View style={{ padding: 20 }}>
-        <NavigateButton
-          title="Almacenamiento"
-          iconName="data-usage"
-          navigateTo="Storage"
-          style={{ backgroundColor: colors.superficies, color: colors.primary }}
-        />
-      </View>
       <View style={styles.closeSessionContainer}>
         <Button
           title="Cerrar sesión"

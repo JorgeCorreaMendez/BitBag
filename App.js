@@ -10,7 +10,6 @@ import Login from "./src/screen/Login";
 import Player from "./src/screen/Player";
 import Setting from "./src/screen/Settings/Setting";
 import Account from "./src/screen/Settings/Account";
-import Storage from "./src/screen/Settings/Storage";
 
 import colors from "./src/constants/colors";
 import size from "./src/constants/size";
@@ -53,11 +52,6 @@ const SettingNav = () => {
         name="Account"
         component={Account}
         options={{ title: "Cuenta" }}
-      />
-      <Stack.Screen
-        name="Storage"
-        component={Storage}
-        options={{ title: "Almacenamiento" }}
       />
     </Stack.Navigator>
   );
