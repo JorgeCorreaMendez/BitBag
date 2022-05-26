@@ -29,6 +29,9 @@ const getCustomErrorMessage = (errorCode) => {
     case "auth/missing-email":
       errorCode = "Error, No ha introducido ningún correo";
       break;
+    case "auth/network-request-failed":
+      errorCode = "Error, no tienes conexion a internet, intentelo mas tarde";
+      break;
     default:
       errorCode = `Error desconocido, codigo ${errorCode}`;
   }

@@ -1,7 +1,39 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Alert, Text, View, StyleSheet } from "react-native";
+import { getAuth, deleteUser } from "firebase/auth";
+
 import Button from "../../components/button/MyButton";
 import colors from "../../constants/colors";
 import size from "../../constants/size";
+
+const deleteUserFirebase = () => {
+  const user = getAuth().currentUser;
+
+  try {
+    deleteUser(user);
+
+    console.log(`Se ha elimina el usuario ${user.email} `);
+  } catch (err) {
+    console.error("Error al eliminar el usuario " + err);
+  }
+};
+
+const AlertDeleteUser = () => {
+  Alert.alert(
+    "¿Quiere eliminar la cuenta de bitbag?",
+    "Si elimina su cuenta perdera todos los datos dentro de bitbag ¿Estas seguro que quieres continuar?",
+    [
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+      {
+        text: "Eliminar",
+        style: "destructive",
+        onPress: () => deleteUserFirebase(),
+      },
+    ]
+  );
+};
 
 const Account = () => {
   return (
@@ -11,7 +43,11 @@ const Account = () => {
         <Text style={styles.emailText}>jorgecorreamen@gmail.com</Text>
       </View>
       <View style={{ alignItems: "center" }}>
-        <Button title="Eliminar cuenta" style={styles.deleteUserButton} />
+        <Button
+          title="Eliminar cuenta"
+          style={styles.deleteUserButton}
+          onPress={() => AlertDeleteUser()}
+        />
       </View>
     </View>
   );
