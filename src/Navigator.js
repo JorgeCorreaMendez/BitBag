@@ -87,13 +87,13 @@ const Navigator = ({
 
   return (
     <NavigationContainer>
-      {!user ? (
+      {user ? (
         <Tab.Navigator
           screenOptions={{
             ...commonsOptions,
             tabBarStyle: {
               backgroundColor: colors.superficies,
-              paddingBottom: "3%",
+              paddingVertical: "3%",
               height: "9%",
             },
             tabBarLabelStyle: {

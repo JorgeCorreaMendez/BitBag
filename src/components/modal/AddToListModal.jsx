@@ -20,7 +20,6 @@ const AddToListModal = ({
   closeModal,
   onPressItem,
 }) => {
-  console.log(playlists);
   return (
     <Modal animationType="fade" visible={visible} transparent={true}>
       <View style={styles.background}>
@@ -44,7 +43,9 @@ const AddToListModal = ({
 
                   return (
                     <TouchableOpacity
-                      onPress={() => {onPressItem(playlist)}}
+                      onPress={() => {
+                        onPressItem(playlist);
+                      }}
                       style={styles.dataPlaylistContainer}
                       key={uuidv4()}
                     >

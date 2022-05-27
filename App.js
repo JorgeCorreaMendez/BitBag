@@ -64,33 +64,44 @@ export default function App() {
     setSongs((currentValue) => currentValue.filter((el) => el.key !== key));
   };
 
+  // TODO -> Los modales no aparecen y la aplicacion se queda colgada
   const createNewPlaylist = (name, icon) => {
     const existPlaylist = playlists.find((el) => el.name === name);
 
-    if (!existPlaylist && name !== "") {
+    if (existPlaylist || name === "") {
+      console.error("Ya existe una canción con este nombre");
+    } else {
       setPlaylists((currentValue) => [
         ...currentValue,
         { key: uuidv4(), name, icon, songs: [] },
       ]);
+
+      console.log("Se ha creado la playlist");
     }
   };
 
-  const getSongToAddPlaylist = (songData) => {
+  const setNewSongToAddPlaylist = (songData) => {
     setShowAddToListModal(true);
     setSongToAddPlaylist(songData);
   };
 
   const addSongToPlaylist = (playlist) => {
     setShowAddToListModal(false);
-    setPlaylists((currentValue) => {
-      playlist.songs.push(songToAddPlaylist);
+    if (playlist.songs.includes(songToAddPlaylist)) {
+      setMensageModal(`La canción ya se encuentra dentro de la playlist`);
+      setShowErrorModal(true);
+    } else {
+      setPlaylists((currentValue) => {
+        currentValue
+          .filter((actualPlaylist) => actualPlaylist === playlist)
+          .unshift(playlist.songs.push(songToAddPlaylist));
 
-      currentValue
-        .filter((actualPlaylist) => actualPlaylist === playlist)
-        .unshift(playlist);
+        return currentValue;
+      });
 
-      return currentValue;
-    });
+      setMensageModal(`Canción añadida a la playlist`);
+      setShowSuccessModal(true);
+    }
   };
 
   return (
@@ -101,7 +112,7 @@ export default function App() {
         deleteSong={deleteSong}
         playlists={playlists}
         createNewPlaylist={createNewPlaylist}
-        addSongToPlaylist={getSongToAddPlaylist}
+        addSongToPlaylist={setNewSongToAddPlaylist}
       />
 
       <AddToListModal

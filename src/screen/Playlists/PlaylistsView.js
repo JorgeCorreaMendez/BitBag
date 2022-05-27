@@ -58,10 +58,7 @@ const PlaylistsView = ({ playlists, createNewPlaylist }) => {
       <View style={styles.createContainer}>
         <Button
           title="Crear nueva playlist"
-          style={{
-            color: colors.primary,
-            backgroundColor: colors.superficies,
-          }}
+          style={styles.button}
           onPress={() => onShowAddModal()}
         />
       </View>
@@ -70,10 +67,10 @@ const PlaylistsView = ({ playlists, createNewPlaylist }) => {
         value={namePlaylist}
         onChange={setNamePlaylist}
         visible={showAddModal}
-        event={() => createNewPlaylist(namePlaylist, icon)}
         closeModal={() => setShowAddModal(false)}
+        event={() => createNewPlaylist(namePlaylist, icon)}
         icon={icon}
-        placeholder="playlist name"
+        placeholder="playlist"
         placeholderTextColor={colors.primary}
       />
     </View>
@@ -99,6 +96,11 @@ const styles = StyleSheet.create({
   text: {
     color: colors.primary,
     fontSize: size.h2,
+  },
+  button: {
+    color: colors.primary,
+    backgroundColor: colors.superficies,
+    paddingHorizontal: 30,
   },
 });
 
