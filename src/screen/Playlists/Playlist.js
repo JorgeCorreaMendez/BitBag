@@ -1,21 +1,61 @@
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import SongList from "../../components/item/SongList.jsx";
 import colors from "../../constants/colors";
 import size from "../../constants/size";
+import ModalOptions from "../../components/modal/ModalOptions.jsx";
+import ModalAlert from "../../components/modal/ModalAlert.jsx";
 
 const Playlist = ({ route }) => {
+  const [showModalOptions, setShowModalOptions] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [mensageModal, setMensageModal] = useState("");
+
   const { playlistData } = route.params;
   const icon = playlistData.icon;
+
+  const onCloseModals = () => {
+    setShowErrorModal(false);
+
+    setMensageModal("");
+  };
+
+  const options = [
+    {
+      title: "Reproducir Playlist",
+      iconName: "play-arrow",
+      event: () => goToPlayerWith(playlistData.songs[0]),
+    },
+    {
+      title: "Editar Playlist",
+      iconName: "edit",
+      event: () => console.log("edit playlist"),
+    },
+    {
+      title: "Borrar Playlist",
+      iconName: "delete",
+      event: () => console.log("edit playlist"),
+    },
+  ];
 
   const navigator = useNavigation();
   const goToPlayerWith = (song) => {
     const { name, songs } = playlistData;
     const startPosition = playlistData.songs.indexOf(song);
 
-    navigator.navigate("Player", { playlistName: name, songs, startPosition });
+    if (startPosition !== -1) {
+      navigator.navigate("Player", {
+        playlistName: name,
+        songs,
+        startPosition,
+      });
+    } else {
+      setMensageModal("Error, la playlist esta vacia");
+      setShowErrorModal(true);
+    }
   };
 
   return (
@@ -31,10 +71,12 @@ const Playlist = ({ route }) => {
           </Text>
 
           <View style={styles.optionContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowModalOptions(true)}>
               <MaterialIcons name="settings" size={50} color={colors.primary} />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => goToPlayerWith(playlistData.songs[0])}
+            >
               <MaterialIcons
                 name="play-circle-outline"
                 size={50}
@@ -54,6 +96,21 @@ const Playlist = ({ route }) => {
           <SongList list={playlistData.songs} goToPlayer={goToPlayerWith} />
         )}
       </View>
+      <ModalOptions
+        description={playlistData.songs.length}
+        visible={showModalOptions}
+        closeModal={() => setShowModalOptions(false)}
+        DataToShow={playlistData}
+        options={options}
+      />
+
+      <ModalAlert
+        visible={showErrorModal}
+        closeModal={onCloseModals}
+        text={mensageModal}
+        iconName="alert-circle"
+        color={colors.error}
+      />
     </View>
   );
 };

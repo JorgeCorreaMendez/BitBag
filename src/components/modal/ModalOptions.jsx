@@ -12,7 +12,13 @@ import { v4 as uuidv4 } from "uuid";
 import colors from "../../constants/colors";
 import size from "../../constants/size";
 
-const ModalOptions = ({ DataToShow, options, visible, closeModal }) => {
+const ModalOptions = ({
+  DataToShow,
+  description,
+  options,
+  visible,
+  closeModal,
+}) => {
   return (
     <Modal animationType="fade" visible={visible} transparent={true}>
       <View style={styles.container}>
@@ -34,7 +40,9 @@ const ModalOptions = ({ DataToShow, options, visible, closeModal }) => {
                   {DataToShow.name}
                 </Text>
                 <Text style={{ color: colors.secundary, fontSize: size.h3 }}>
-                  {DataToShow.size} MB
+                  {DataToShow.size
+                    ? DataToShow.size + "MB"
+                    : description + " Canciones"}
                 </Text>
               </View>
             </View>
