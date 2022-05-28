@@ -7,7 +7,9 @@ const PlaylistItem = ({ playlistData, goToPlaylist }) => {
   const { name, color } = playlistData.icon;
 
   return (
-    <TouchableOpacity onPress={() => goToPlaylist(playlistData)}>
+    <TouchableOpacity
+      onPress={() => goToPlaylist(playlistData, playlistData.name)}
+    >
       <View style={styles.margins}>
         <View style={styles.container}>
           <View style={[styles.iconContainer, { backgroundColor: color }]}>

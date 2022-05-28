@@ -11,10 +11,14 @@ import size from "../constants/size";
 
 const Tracks = ({ songs, importSong, deleteSong, addSongToPlaylist }) => {
   const navigator = useNavigation();
-  const goToPlayerWith = (song) => {
+  const goToPlayerWith = (song, playlistName) => {
     const startPosition = songs.indexOf(song);
 
-    navigator.navigate("Player", { songs, startPosition });
+    navigator.navigate("Player", {
+      playlistName,
+      startPosition,
+      songs,
+    });
   };
 
   return (
@@ -47,6 +51,7 @@ const Tracks = ({ songs, importSong, deleteSong, addSongToPlaylist }) => {
               onDelete={deleteSong}
               goToPlayer={goToPlayerWith}
               addSongToPlaylist={addSongToPlaylist}
+              playlistName="Tracks"
             />
           </View>
         </View>

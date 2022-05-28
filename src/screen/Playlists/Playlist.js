@@ -1,4 +1,5 @@
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import SongList from "../../components/item/SongList.jsx";
@@ -8,6 +9,14 @@ import size from "../../constants/size";
 const Playlist = ({ route }) => {
   const { playlistData } = route.params;
   const icon = playlistData.icon;
+
+  const navigator = useNavigation();
+  const goToPlayerWith = (song) => {
+    const { name, songs } = playlistData;
+    const startPosition = playlistData.songs.indexOf(song);
+
+    navigator.navigate("Player", { playlistName: name, songs, startPosition });
+  };
 
   return (
     <View style={styles.container}>
@@ -42,7 +51,7 @@ const Playlist = ({ route }) => {
             de pistas
           </Text>
         ) : (
-          <SongList list={playlistData.songs} />
+          <SongList list={playlistData.songs} goToPlayer={goToPlayerWith} />
         )}
       </View>
     </View>

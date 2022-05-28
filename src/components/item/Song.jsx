@@ -6,14 +6,20 @@ import ModalOptions from "../modal/ModalOptions";
 
 import colors from "../../constants/colors";
 
-const Song = ({ songData, onDelete, goToPlayer, addSongToPlaylist }) => {
+const Song = ({
+  songData,
+  onDelete,
+  goToPlayer,
+  addSongToPlaylist,
+  playlistName,
+}) => {
   const [showOptionsModal, setShowOptionsModals] = useState(false);
 
   const options = [
     {
       title: "Reproducir canción",
       iconName: "play-arrow",
-      event: () => goToPlayer(songData),
+      event: () => goToPlayer(songData, playlistName),
     },
     {
       title: "Añadir a la playlist",
@@ -29,7 +35,7 @@ const Song = ({ songData, onDelete, goToPlayer, addSongToPlaylist }) => {
 
   return (
     <View style={{ paddingBottom: 20, paddingHorizontal: 10 }}>
-      <TouchableOpacity onPress={() => goToPlayer(songData)}>
+      <TouchableOpacity onPress={() => goToPlayer(songData, playlistName)}>
         <View style={styles.container}>
           <Image
             style={styles.image}

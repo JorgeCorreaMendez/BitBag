@@ -13,6 +13,7 @@ import size from "../constants/size";
 const Player = ({ route }) => {
   const playlist = route.params?.songs;
   const startPosition = route.params?.startPosition;
+  const playlistName = route.params?.playlistName;
 
   const [positionPlaylist, setPositionPlaylist] = useState(startPosition);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -166,7 +167,7 @@ const Player = ({ route }) => {
               {playlist[positionPlaylist]?.name}
             </Text>
             <Text style={{ color: colors.secundary, fontSize: size.h4 }}>
-              Reproduciendo desde pistas
+              Reproduciendo desde {playlistName}
             </Text>
           </View>
           <View style={styles.sliderContainer}>

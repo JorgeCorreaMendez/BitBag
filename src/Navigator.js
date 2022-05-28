@@ -93,7 +93,7 @@ const Navigator = ({
             ...commonsOptions,
             tabBarStyle: {
               backgroundColor: colors.superficies,
-              paddingVertical: "3%",
+              paddingTop: 5,
               height: "9%",
             },
             tabBarLabelStyle: {

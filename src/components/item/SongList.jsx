@@ -1,7 +1,13 @@
 import { View, FlatList } from "react-native";
 import Song from "./Song";
 
-const SongList = ({ list, onDelete, goToPlayer, addSongToPlaylist }) => {
+const SongList = ({
+  list,
+  playlistName,
+  onDelete,
+  goToPlayer,
+  addSongToPlaylist,
+}) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
@@ -10,9 +16,10 @@ const SongList = ({ list, onDelete, goToPlayer, addSongToPlaylist }) => {
           return (
             <Song
               songData={song.item}
-              onDelete={onDelete}
-              goToPlayer={goToPlayer}
+              playlistName={playlistName}
               addSongToPlaylist={addSongToPlaylist}
+              goToPlayer={goToPlayer}
+              onDelete={onDelete}
             />
           );
         }}
