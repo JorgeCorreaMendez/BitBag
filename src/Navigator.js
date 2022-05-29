@@ -26,6 +26,7 @@ const Navigator = ({
   playlists,
   createNewPlaylist,
   addSongToPlaylist,
+  deletePlaylist,
 }) => {
   const [user, setUser] = useState({});
 
@@ -55,6 +56,7 @@ const Navigator = ({
             <PlaylistsView
               playlists={playlists}
               createNewPlaylist={createNewPlaylist}
+              deletePlaylist={deletePlaylist}
             />
           )}
           options={{ title: "Playlist" }}
@@ -84,7 +86,7 @@ const Navigator = ({
       </Stack.Navigator>
     );
   };
-
+  
   return (
     <NavigationContainer>
       {user ? (

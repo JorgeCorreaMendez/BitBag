@@ -13,9 +13,10 @@ const Playlist = ({ route }) => {
   const [showModalOptions, setShowModalOptions] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [mensageModal, setMensageModal] = useState("");
-
-  const { playlistData } = route.params;
+  const { playlistData, deletePlaylist } = route.params;
   const icon = playlistData.icon;
+
+  const navigator = useNavigation();
 
   const onCloseModals = () => {
     setShowErrorModal(false);
@@ -37,11 +38,13 @@ const Playlist = ({ route }) => {
     {
       title: "Borrar Playlist",
       iconName: "delete",
-      event: () => console.log("edit playlist"),
+      event: () => {
+        deletePlaylist(playlistData.key);
+        navigator.navigate("PlaylistsView");
+      },
     },
   ];
 
-  const navigator = useNavigation();
   const goToPlayerWith = (song) => {
     const { name, songs } = playlistData;
     const startPosition = playlistData.songs.indexOf(song);

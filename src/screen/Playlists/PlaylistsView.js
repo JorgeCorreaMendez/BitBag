@@ -22,7 +22,7 @@ const randomColorIcon = () => {
   ];
 };
 
-const PlaylistsView = ({ playlists, createNewPlaylist }) => {
+const PlaylistsView = ({ playlists, createNewPlaylist, deletePlaylist }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [namePlaylist, setNamePlaylist] = useState("");
   const [icon, setIcon] = useState({ name: "", color: "" });
@@ -38,6 +38,7 @@ const PlaylistsView = ({ playlists, createNewPlaylist }) => {
 
     navigator.navigate("PlaylistView", {
       playlistData,
+      deletePlaylist,
     });
   };
 

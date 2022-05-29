@@ -80,6 +80,10 @@ export default function App() {
     }
   };
 
+  const deletePlaylist = (key) => {
+    setPlaylists((currentValue) => currentValue.filter((el) => el.key !== key));
+  };
+
   const setNewSongToAddPlaylist = (songData) => {
     setShowAddToListModal(true);
     setSongToAddPlaylist(songData);
@@ -113,6 +117,7 @@ export default function App() {
         playlists={playlists}
         createNewPlaylist={createNewPlaylist}
         addSongToPlaylist={setNewSongToAddPlaylist}
+        deletePlaylist={deletePlaylist}
       />
 
       <AddToListModal
