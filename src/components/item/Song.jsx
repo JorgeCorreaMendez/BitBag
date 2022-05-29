@@ -33,6 +33,30 @@ const Song = ({
     },
   ];
 
+  const getOptions = () => {
+    return playlistName === "Tracks" ? (
+      <View>
+        <TouchableOpacity onPress={() => setShowOptionsModals(true)}>
+          <View style={styles.iconContainer}>
+            <MaterialIcons name="menu" size={26} color={colors.primary} />
+          </View>
+        </TouchableOpacity>
+        <ModalOptions
+          DataToShow={songData}
+          options={options}
+          visible={showOptionsModal}
+          closeModal={() => setShowOptionsModals(false)}
+        />
+      </View>
+    ) : (
+      <TouchableOpacity onPress={() => onDelete(songData.key, playlistName)}>
+        <View style={styles.iconContainer}>
+          <MaterialIcons name="delete" size={26} color={colors.primary} />
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={{ paddingBottom: 20, paddingHorizontal: 10 }}>
       <TouchableOpacity onPress={() => goToPlayer(songData, playlistName)}>
@@ -49,17 +73,7 @@ const Song = ({
               {songData.size} MB
             </Text>
           </View>
-          <TouchableOpacity onPress={() => setShowOptionsModals(true)}>
-            <View style={styles.iconContainer}>
-              <MaterialIcons name="menu" size={26} color={colors.primary} />
-            </View>
-          </TouchableOpacity>
-          <ModalOptions
-            DataToShow={songData}
-            options={options}
-            visible={showOptionsModal}
-            closeModal={() => setShowOptionsModals(false)}
-          />
+          {getOptions()}
         </View>
       </TouchableOpacity>
     </View>

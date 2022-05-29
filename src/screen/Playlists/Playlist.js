@@ -10,10 +10,10 @@ import ModalOptions from "../../components/modal/ModalOptions.jsx";
 import ModalAlert from "../../components/modal/ModalAlert.jsx";
 
 const Playlist = ({ route }) => {
+  const { playlistData, deletePlaylist, deleteSongFromPlaylist } = route.params;
   const [showModalOptions, setShowModalOptions] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [mensageModal, setMensageModal] = useState("");
-  const { playlistData, deletePlaylist } = route.params;
   const icon = playlistData.icon;
 
   const navigator = useNavigation();
@@ -96,7 +96,12 @@ const Playlist = ({ route }) => {
             de pistas
           </Text>
         ) : (
-          <SongList list={playlistData.songs} goToPlayer={goToPlayerWith} />
+          <SongList
+            list={playlistData.songs}
+            playlistName={playlistData.name}
+            goToPlayer={goToPlayerWith}
+            onDelete={deleteSongFromPlaylist}
+          />
         )}
       </View>
       <ModalOptions

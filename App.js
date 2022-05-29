@@ -108,6 +108,23 @@ export default function App() {
     }
   };
 
+  const deleteSongFromPlaylist = (key, playlistName) => {
+    setPlaylists((currentValue) => {
+      return currentValue.map((playlist) => {
+        const songs = playlist.songs.filter((song) => {
+          return song.key !== key && playlistName === playlist.name;
+        });
+
+        return { ...playlist, songs };
+      });
+    });
+
+    setMensageModal(
+      `Se a eliminado la canción de la playlist, vuelva a entrar en la playlist para ver los cambios`
+    );
+    setShowSuccessModal(true);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Navigator
@@ -118,6 +135,7 @@ export default function App() {
         createNewPlaylist={createNewPlaylist}
         addSongToPlaylist={setNewSongToAddPlaylist}
         deletePlaylist={deletePlaylist}
+        deleteSongFromPlaylist={deleteSongFromPlaylist}
       />
 
       <AddToListModal
