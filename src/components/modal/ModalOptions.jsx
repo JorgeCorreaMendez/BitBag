@@ -29,10 +29,25 @@ const ModalOptions = ({
           <View style={styles.configureContainer}>
             <View style={styles.dataContainer}>
               <View style={{ paddingHorizontal: 10 }}>
-                <Image
-                  style={styles.image}
-                  source={require("../../../assets/default-album-art.png")}
-                />
+                {DataToShow.icon ? (
+                  <View
+                    style={[
+                      styles.iconContainer,
+                      { backgroundColor: DataToShow.icon.color },
+                    ]}
+                  >
+                    <MaterialIcons
+                      name={DataToShow.icon.name}
+                      size={60}
+                      color={colors.primary}
+                    />
+                  </View>
+                ) : (
+                  <Image
+                    style={styles.image}
+                    source={require("../../../assets/default-album-art.png")}
+                  />
+                )}
               </View>
 
               <View>
@@ -103,6 +118,10 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 10,
     paddingHorizontal: 20,
+  },
+  iconContainer: {
+    borderRadius: 10,
+    padding: 10,
   },
   optionsContainer: {
     paddingLeft: 10,
