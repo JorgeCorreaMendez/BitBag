@@ -14,9 +14,8 @@ const Playlist = ({ route }) => {
   const [showModalOptions, setShowModalOptions] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [mensageModal, setMensageModal] = useState("");
-  const icon = playlistData.icon;
-
   const navigator = useNavigation();
+  const icon = playlistData.icon;
 
   const onCloseModals = () => {
     setShowErrorModal(false);
@@ -30,11 +29,7 @@ const Playlist = ({ route }) => {
       iconName: "play-arrow",
       event: () => goToPlayerWith(playlistData.songs[0]),
     },
-    {
-      title: "Editar Playlist",
-      iconName: "edit",
-      event: () => console.log("edit playlist"),
-    },
+
     {
       title: "Borrar Playlist",
       iconName: "delete",

@@ -40,7 +40,7 @@ const Account = () => {
     <View style={styles.container}>
       <View style={{ paddingVertical: "10%" }}>
         <Text style={styles.dataTitle}>Correo Electronico</Text>
-        <Text style={styles.emailText}>jorgecorreamen@gmail.com</Text>
+        <Text style={styles.emailText}>{getAuth().currentUser.email}</Text>
       </View>
       <View style={{ alignItems: "center" }}>
         <Button
