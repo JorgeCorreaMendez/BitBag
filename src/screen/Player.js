@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
+/* Importing the Time.js file from the utils folder. */
 
 import Time from "../utils/Time";
 import colors from "../constants/colors";

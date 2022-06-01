@@ -7,7 +7,7 @@ import ModalInputData from "../components/modal/ModalInputData";
 import InputText from "../components/input/InputTextWithIcon";
 import Button from "../components/button/MyButton";
 
-import firebaseUtils from "../utils/FirebaseUtils";
+import firebaseUtils from "../utils/firebaseUtils";
 import colors from "../constants/colors";
 import size from "../constants/size";
 
