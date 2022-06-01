@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import Navigator from "./src/Navigator";
 import ModalAlert from "./src/components/modal/ModalAlert";
 
-import SizeFileConverter from "./src/utils/sizeFileConverter";
+import SizeFileConverter from "./src/utils/SizeFileConverter";
 import colors from "./src/constants/colors";
 import AddToListModal from "./src/components/modal/AddToListModal";
 
